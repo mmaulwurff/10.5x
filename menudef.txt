@@ -1,0 +1,4 @@
+AddOptionMenu OptionsMenu
+{
+  X5Slider "x", x5_multiplier, 0, 10, 0.05, 2
+}
