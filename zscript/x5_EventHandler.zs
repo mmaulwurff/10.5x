@@ -25,7 +25,7 @@ class x5_EventHandler : EventHandler
   {
     if (level.time != 0) return;
 
-    int multiplier = Cvar.GetCvar("x5_multiplier", players[consolePlayer]).GetInt();
+    int multiplier = Cvar.GetCvar("x5_multiplier").GetInt();
     if (multiplier == 100) return;
 
     let iterator = ThinkerIterator.Create("Actor");
