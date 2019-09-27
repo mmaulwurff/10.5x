@@ -14,6 +14,7 @@ Enemy multiplier mod for GZDoom.
 
 - No difficult options, only a single slider;
 - No display of remaining enemies;
+- Doesn't affect enemies spawned after the map is loaded;
 - Doesn't work with Zandronum.
 
 # Credits
