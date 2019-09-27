@@ -17,6 +17,13 @@
 
 class OptionMenuItemX5Slider : OptionMenuItemSlider
 {
+  OptionMenuItemX5Slider Init(String label, Name command, double min, double max, double step, int showval = 1)
+  {
+    Super.init(label, command, min, max, step, showval);
+    setLabel(mCvar.getInt());
+    return self;
+  }
+
   override double getSliderValue()
   {
     return (mCVar.getInt() / 100.0);
@@ -24,6 +31,26 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
 
   override void setSliderValue(double val)
   {
-    mCvar.setInt(round(val * 100));
+    int v = round(val * 100);
+    mCvar.setInt(v);
+    setLabel(v);
   }
+
+  private void setLabel(int val)
+  {
+    switch (val)
+    {
+
+    case    0: mLabel = "(Play Tourism Deluxe instead!) x"; break;
+    case    5: mLabel = "(Anybody home?) x"; break;
+    case  100: mLabel = "(Standard) x"; break;
+    case  200: mLabel = "(Double trouble) x"; break;
+    case 1000: mLabel = "(Classic 10x) x"; break;
+    case 1050: mLabel = "(Slaughter!) x"; break;
+    case 2000: mLabel = "(How did you get here?) x"; break;
+    default:   mLabel = "x"; break;
+
+    }
+  }
+
 }
