@@ -28,4 +28,5 @@ License: GPLv3 (see copying.txt).
 
 # Credits
 - The Zombie Killer: an original idea (the code is used as a reference);
+- Jimmy: bug reporting.
 - m8f: author.

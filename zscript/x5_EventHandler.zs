@@ -89,7 +89,7 @@ class x5_EventHandler : EventHandler
 
       uint stp = round(monstersByClass.size() * fractionMultiplier);
 
-      if (integerMultiplier > 1) // add
+      if (integerMultiplier >= 1) // add
       {
         for (uint i = 0; i < stp; ++i)
         {
