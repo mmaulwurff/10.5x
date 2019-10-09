@@ -107,7 +107,8 @@ class x5_EventHandler : EventHandler
       {
         for (uint i = stp; i < monstersByClass.size(); ++i)
         {
-          shuffled[i].A_Die();
+          shuffled[i].GiveInventory("x5_Killer", 1);
+          //shuffled[i].A_Die();
         }
       }
     }
