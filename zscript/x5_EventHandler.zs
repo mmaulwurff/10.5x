@@ -26,7 +26,11 @@ class x5_EventHandler : EventHandler
     if (level.time != 0) return;
 
     int multiplier = Cvar.GetCvar("x5_multiplier").GetInt();
-    if (multiplier == 100) return;
+    if (multiplier == 100)
+    {
+      x5_Density.printMonsterDensity();
+      return;
+    }
 
     let iterator = ThinkerIterator.Create("Actor");
     Actor monster;
@@ -107,5 +111,7 @@ class x5_EventHandler : EventHandler
         }
       }
     }
+
+    x5_Density.printMonsterDensity();
   }
 }
