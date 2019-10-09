@@ -8,7 +8,8 @@ Enemy multiplier mod for GZDoom.
 - Fractional values!
 - Can increase the number of enemies;
 - Can decrease the number of enemies (anti-slaughter);
-- The number of enemies is decreased for each enemy class separately.
+- The number of enemies is decreased for each enemy class separately;
+- Prints estimated enemy density on level start.
 
 # Anti-features
 
