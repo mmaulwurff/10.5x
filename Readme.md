@@ -9,7 +9,8 @@ Enemy multiplier mod for GZDoom.
 - Can increase the number of enemies;
 - Can decrease the number of enemies (anti-slaughter);
 - The number of enemies is decreased for each enemy class separately;
-- Prints estimated enemy density on level start.
+- Prints estimated enemy density on level start;
+- Works with monster randomizers.
 
 # Anti-features
 
