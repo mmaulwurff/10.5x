@@ -15,7 +15,7 @@
  * Typist.pk3.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-class x5_Density
+class x5_Density play
 {
 
 // public: /////////////////////////////////////////////////////////////////////
@@ -25,25 +25,22 @@ class x5_Density
   {
     let message = "Estimated enemy density: %.3f.";
 
-    int nMonsters = level.total_monsters - level.killed_monsters;
-    if (nMonsters == 0)
-    {
-      Console.Printf(message, 0);
-      return;
-    }
-
+    int nMonsters = 0;
     int minX;
     int minY;
     int maxX;
     int maxY;
     bool isFirst = true;
-    bool isFound = false;
     let i = ThinkerIterator.Create("Actor");
     Actor mo;
     while (mo = Actor(i.Next()))
     {
-      if (!(mo.bIsMonster || mo is "Inventory")) { continue; }
-      isFound = true;
+      bool isMonster = mo.bIsMonster
+        || GetDefaultByType(Actor.GetReplacee(mo.GetClassName())).bIsMonster;
+      if (!(isMonster || mo is "Inventory")) { continue; }
+
+      ++nMonsters;
+
       if (isFirst)
       {
         minX = mo.pos.x;
@@ -58,6 +55,12 @@ class x5_Density
 
       if      (mo.pos.y < minY) { minY = mo.pos.y; }
       else if (mo.pos.y > maxY) { maxY = mo.pos.y; }
+    }
+
+    if (nMonsters == 0)
+    {
+      Console.Printf(message, 0);
+      return;
     }
 
     int radius = int(players[consolePlayer].mo.radius);

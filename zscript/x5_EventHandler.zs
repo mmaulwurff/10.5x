@@ -18,8 +18,16 @@
 // It should be illegal to write code like this.
 class x5_EventHandler : EventHandler
 {
-  Array<Actor> monsters;
-  Array<String> classes;
+
+// public: // EventHandler /////////////////////////////////////////////////////
+
+  override void WorldThingSpawned(WorldEvent event)
+  {
+    if (event.thing.bIsMonster)
+    {
+      event.thing.bThruSpecies = true;
+    }
+  }
 
   override void WorldTick()
   {
@@ -36,7 +44,7 @@ class x5_EventHandler : EventHandler
     Actor monster;
     while (monster = Actor(iterator.Next()))
     {
-      if (monster.bIsMonster) monsters.Push(monster);
+      if (GetDefaultByType(Actor.GetReplacee(monster.GetClassName())).bIsMonster) monsters.Push(monster);
     }
 
     int integerMultiplier = multiplier / 100;
@@ -44,7 +52,6 @@ class x5_EventHandler : EventHandler
     for (uint i = 0; i < monsters.size(); ++i)
     {
       let monster = monsters[i];
-      monster.bThruSpecies = true;
       String className = monster.GetClassName();
       if (classes.Find(className) == classes.size())
       {
@@ -53,9 +60,7 @@ class x5_EventHandler : EventHandler
 
       for (int c = 0; c < nCopies; ++c)
       {
-        let spawned = Actor.Spawn(className, monster.Pos);
-        spawned.bAmbush = monster.bAmbush;
-        spawned.angle = monster.angle;
+        clone(monster);
       }
     }
 
@@ -97,10 +102,7 @@ class x5_EventHandler : EventHandler
       {
         for (uint i = 0; i < stp; ++i)
         {
-          let original = shuffled[i];
-          let spawned = Actor.Spawn(original.GetClassName(), original.Pos);
-          spawned.bAmbush = original.bAmbush;
-          spawned.angle = original.angle;
+          clone(shuffled[i]);
         }
       }
       else // decimate
@@ -108,11 +110,55 @@ class x5_EventHandler : EventHandler
         for (uint i = stp; i < monstersByClass.size(); ++i)
         {
           shuffled[i].GiveInventory("x5_Killer", 1);
-          //shuffled[i].A_Die();
         }
       }
     }
 
     x5_Density.printMonsterDensity();
   }
-}
+
+// private: ////////////////////////////////////////////////////////////////////
+
+  private
+  void clone(Actor original)
+  {
+    let spawned = Actor.Spawn(original.GetClassName(), original.Pos);
+    spawned.bAmbush = original.bAmbush;
+
+    // copied from randomspawner.zs
+    spawned.SpawnAngle   = original.SpawnAngle;
+    spawned.Angle        = original.Angle;
+    spawned.Pitch        = original.Pitch;
+    spawned.Roll         = original.Roll;
+    spawned.SpawnPoint   = original.SpawnPoint;
+    spawned.special      = original.special;
+    spawned.args[0]      = original.args[0];
+    spawned.args[1]      = original.args[1];
+    spawned.args[2]      = original.args[2];
+    spawned.args[3]      = original.args[3];
+    spawned.args[4]      = original.args[4];
+    spawned.special1     = original.special1;
+    spawned.special2     = original.special2;
+    // MTF_SECRET needs special treatment to avoid incrementing the secret
+    // counter twice. It haoriginal.d already been processed for the spawner itself.
+    spawned.SpawnFlags   = original.SpawnFlags & ~MTF_SECRET;
+    spawned.HandleSpawnFlags();
+
+    spawned.SpawnFlags   = original.SpawnFlags;
+    // "Transfer" count secret flag to spawned actor
+    spawned.bCountSecret = original.SpawnFlags & MTF_SECRET;
+    spawned.ChangeTid(original.tid);
+    spawned.Vel          = original.Vel;
+    // For things such as DamageMaster/DamageChildren, transfer mastery.
+    spawned.master       = original.master;
+    spawned.target       = original.target;
+    spawned.tracer       = original.tracer;
+    spawned.CopyFriendliness(original, false);
+  }
+
+// private: ////////////////////////////////////////////////////////////////////
+
+  private Array<Actor> monsters;
+  private Array<String> classes;
+
+} // class x5_EventHandler
