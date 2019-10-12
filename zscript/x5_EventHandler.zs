@@ -21,14 +21,6 @@ class x5_EventHandler : EventHandler
 
 // public: // EventHandler /////////////////////////////////////////////////////
 
-  override void WorldThingSpawned(WorldEvent event)
-  {
-    if (event.thing.bIsMonster)
-    {
-      event.thing.bThruSpecies = true;
-    }
-  }
-
   override void WorldTick()
   {
     if (level.time != 0) return;
@@ -122,8 +114,11 @@ class x5_EventHandler : EventHandler
   private
   void clone(Actor original)
   {
+    original.bThruSpecies = true;
+
     let spawned = Actor.Spawn(original.GetClassName(), original.Pos);
     spawned.bAmbush = original.bAmbush;
+    spawned.bThruSpecies = true;
 
     // copied from randomspawner.zs
     spawned.SpawnAngle   = original.SpawnAngle;
