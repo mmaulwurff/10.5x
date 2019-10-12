@@ -40,8 +40,11 @@ class x5_Density play
         || GetDefaultByType(Actor.GetReplacee(mo.GetClassName())).bIsMonster;
       if (!(isMonster || mo is "Inventory")) { continue; }
 
-      ++nMonsters;
-      nHealth += mo.Health;
+      if (isMonster)
+      {
+        ++nMonsters;
+        nHealth += mo.Health;
+      }
 
       if (isFirst)
       {
@@ -71,8 +74,8 @@ class x5_Density play
 
     int area = (maxX - minX) * (maxY - minY);
 
-    double density       = double(nMonsters) / area / 0.347656;   // Doom E1M1 UV
-    double healthDensity = double(nHealth)   / area / 237.890625; // Doom E1M1 UV
+    double density       = double(nMonsters) / area / 0.113281; // Doom E1M1 UV
+    double healthDensity = double(nHealth)   / area / 3.515625; // Doom E1M1 UV
     Console.Printf(message, density, healthDensity);
   }
 
