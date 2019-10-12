@@ -23,9 +23,10 @@ class x5_Density play
   static
   void printMonsterDensity()
   {
-    let message = "Estimated enemy density: %.3f.";
+    let message = "Estimated enemy density: %.3f, health: %.3f.";
 
-    int nMonsters = 0;
+    uint nMonsters = 0;
+    uint nHealth   = 0;
     int minX;
     int minY;
     int maxX;
@@ -40,6 +41,7 @@ class x5_Density play
       if (!(isMonster || mo is "Inventory")) { continue; }
 
       ++nMonsters;
+      nHealth += mo.Health;
 
       if (isFirst)
       {
@@ -59,7 +61,7 @@ class x5_Density play
 
     if (nMonsters == 0)
     {
-      Console.Printf(message, 0);
+      Console.Printf(message, 0, 0);
       return;
     }
 
@@ -69,8 +71,9 @@ class x5_Density play
 
     int area = (maxX - minX) * (maxY - minY);
 
-    double density = double(nMonsters) / area / 0.113281; // Doom E1M1 UV
-    Console.Printf(message, density);
+    double density       = double(nMonsters) / area / 0.347656;   // Doom E1M1 UV
+    double healthDensity = double(nHealth)   / area / 237.890625; // Doom E1M1 UV
+    Console.Printf(message, density, healthDensity);
   }
 
 } // class x5_Density
