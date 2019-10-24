@@ -1,1 +1,2 @@
-server int x5_multiplier = 100;
+server int  x5_multiplier    = 100;
+server bool x5_raise_divided = false;

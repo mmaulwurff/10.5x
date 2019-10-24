@@ -21,7 +21,8 @@ class x5_EventHandler : EventHandler
 
 // public: // EventHandler /////////////////////////////////////////////////////
 
-  override void WorldTick()
+  override
+  void WorldTick()
   {
     if (level.time != 0) return;
 
@@ -36,7 +37,10 @@ class x5_EventHandler : EventHandler
     Actor monster;
     while (monster = Actor(iterator.Next()))
     {
-      if (GetDefaultByType(Actor.GetReplacee(monster.GetClassName())).bIsMonster) monsters.Push(monster);
+      if (GetDefaultByType(Actor.GetReplacee(monster.GetClassName())).bIsMonster)
+      {
+        monsters.Push(monster);
+      }
     }
 
     int integerMultiplier = multiplier / 100;
@@ -71,15 +75,16 @@ class x5_EventHandler : EventHandler
         }
       }
 
+      uint nMonstersInClass = monstersByClass.size();
       Array<Actor> shuffled;
       shuffled.Clear();
-      shuffled.Resize(monstersByClass.size());
-      for (uint i = 0; i < monstersByClass.size(); ++i)
+      shuffled.Resize(nMonstersInClass);
+      for (uint i = 0; i < nMonstersInClass; ++i)
       {
-        int r = Random(0, monstersByClass.size() - 1);
-        for (uint j = 0; j < monstersByClass.size(); ++j)
+        int r = Random(0, nMonstersInClass - 1);
+        for (uint j = 0; j < nMonstersInClass; ++j)
         {
-          uint index = (r + j) % monstersByClass.size();
+          uint index = (r + j) % nMonstersInClass;
           if (shuffled[index] == NULL)
           {
             shuffled[index] = monstersByClass[i];
@@ -88,7 +93,7 @@ class x5_EventHandler : EventHandler
         }
       }
 
-      uint stp = round(monstersByClass.size() * fractionMultiplier);
+      uint stp = round(nMonstersInClass * fractionMultiplier);
 
       if (integerMultiplier >= 1) // add
       {
@@ -99,7 +104,7 @@ class x5_EventHandler : EventHandler
       }
       else // decimate
       {
-        for (uint i = stp; i < monstersByClass.size(); ++i)
+        for (uint i = stp; i < nMonstersInClass; ++i)
         {
           shuffled[i].GiveInventory("x5_Killer", 1);
         }

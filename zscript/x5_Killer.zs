@@ -32,6 +32,8 @@ class x5_Killer : Inventory
           && !Owner.InStateSequence(Owner.CurState, idleState))
       {
         Owner.A_Die();
+        Owner.bCorpse = x5_raise_divided;
+        Destroy();
       }
     }
   }

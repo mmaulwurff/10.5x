@@ -11,6 +11,7 @@ Enemy multiplier mod for GZDoom.
 - The number of enemies is decreased for each enemy class separately;
 - Prints estimated enemy density on level start;
 - Works with monster randomizers.
+- Bonus option: optional resurrection of autokilled enemies (x5_raise_divided CVar)
 
 # Anti-features
 
@@ -29,6 +30,8 @@ License: GPLv3 (see copying.txt).
 [Forum topic](https://forum.zdoom.org/viewtopic.php?f=43&t=65962#p1119733)
 
 # Credits
+
 - The Zombie Killer: an original idea (the code is used as a reference);
 - Jimmy: bug reporting.
+- Nems: bug reporting.
 - m8f: author.
