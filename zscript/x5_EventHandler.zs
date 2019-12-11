@@ -24,12 +24,17 @@ class x5_EventHandler : EventHandler
   override
   void WorldTick()
   {
-    if (level.time != 0) return;
+    switch (level.time)
+    {
+    case 0: break;
+    case 3: x5_Density.printMonsterDensity(); return;
+    default: return;
+    }
 
     int multiplier = Cvar.GetCvar("x5_multiplier").GetInt();
+
     if (multiplier == 100)
     {
-      x5_Density.printMonsterDensity();
       return;
     }
 
@@ -110,8 +115,6 @@ class x5_EventHandler : EventHandler
         }
       }
     }
-
-    x5_Density.printMonsterDensity();
   }
 
 // private: ////////////////////////////////////////////////////////////////////

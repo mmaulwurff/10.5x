@@ -36,8 +36,7 @@ class x5_Density play
     Actor mo;
     while (mo = Actor(i.Next()))
     {
-      bool isMonster = mo.bIsMonster
-        || GetDefaultByType(Actor.GetReplacee(mo.GetClassName())).bIsMonster;
+      bool isMonster = mo.bIsMonster;
       if (!(isMonster || mo is "Inventory")) { continue; }
 
       if (isMonster)
