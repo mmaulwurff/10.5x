@@ -44,7 +44,7 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
   override
   void setSliderValue(double val)
   {
-    int v = round(val * 100);
+    int v = int(round(val * 100));
     mCvar.setInt(v);
     setLabel(v);
   }

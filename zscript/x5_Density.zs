@@ -47,18 +47,18 @@ class x5_Density play
 
       if (isFirst)
       {
-        minX = mo.pos.x;
-        minY = mo.pos.y;
-        maxX = mo.pos.x;
-        maxY = mo.pos.y;
+        minX = int(mo.pos.x);
+        minY = int(mo.pos.y);
+        maxX = int(mo.pos.x);
+        maxY = int(mo.pos.y);
         continue;
       }
 
-      if      (mo.pos.x < minX) { minX = mo.pos.x; }
-      else if (mo.pos.x > maxX) { maxX = mo.pos.x; }
+      if      (mo.pos.x < minX) { minX = int(mo.pos.x); }
+      else if (mo.pos.x > maxX) { maxX = int(mo.pos.x); }
 
-      if      (mo.pos.y < minY) { minY = mo.pos.y; }
-      else if (mo.pos.y > maxY) { maxY = mo.pos.y; }
+      if      (mo.pos.y < minY) { minY = int(mo.pos.y); }
+      else if (mo.pos.y > maxY) { maxY = int(mo.pos.y); }
     }
 
     if (nMonsters == 0)

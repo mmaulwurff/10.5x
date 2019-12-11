@@ -98,7 +98,7 @@ class x5_EventHandler : EventHandler
         }
       }
 
-      uint stp = round(nMonstersInClass * fractionMultiplier);
+      uint stp = uint(round(nMonstersInClass * fractionMultiplier));
 
       if (integerMultiplier >= 1) // add
       {
