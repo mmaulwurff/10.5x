@@ -31,7 +31,7 @@ class x5_EventHandler : EventHandler
     default: return;
     }
 
-    int multiplier = Cvar.GetCvar("x5_multiplier").GetInt();
+    int multiplier = x5_multiplier;
 
     if (multiplier == 100)
     {
@@ -114,6 +114,21 @@ class x5_EventHandler : EventHandler
           shuffled[i].GiveInventory("x5_Killer", 1);
         }
       }
+    }
+  }
+
+  override
+  void WorldThingSpawned(WorldEvent event)
+  {
+    let thing = event.thing;
+    if (thing == NULL)
+    {
+      return;
+    }
+
+    if (thing.bMissile && x5_multiplier > 100)
+    {
+      thing.bMThruSpecies = true;
     }
   }
 
