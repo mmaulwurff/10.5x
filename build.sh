@@ -2,16 +2,8 @@
 
 set -e
 
-name=10.5x
-version=$(git describe --abbrev=0 --tags)
-filename=$name-$version.pk3
+filename=10.5x-$(git describe --abbrev=0 --tags).pk3
 
 rm -f $filename
-
-zip $filename \
-    zscript/*.zs \
-    *.md  \
-    *.txt \
-    *.zs
-
-gzdoom -file $filename "$@"
+zip -R $filename "*.md" "*.txt" "*.zs"
+gzdoom $filename "$@"
