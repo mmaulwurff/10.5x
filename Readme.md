@@ -13,8 +13,9 @@ Make anything into a slaughtermap, or make nuts.wad not melt your CPU, all from 
 - Can decrease the number of enemies (anti-slaughter);
 - The number of enemies is decreased for each enemy class separately;
 - Prints estimated enemy density on level start;
-- Works with monster randomizers.
-- Bonus option: optional resurrection of autokilled enemies (x5_raise_divided CVar)
+- Works with monster randomizers;
+- Small initial thrust to cloned enemies (controlled by x5_thrust CVar);
+- Bonus option: optional resurrection of autokilled enemies (x5_raise_divided CVar).
 
 ## Anti-features
 
@@ -38,4 +39,5 @@ License: GPLv3 (see copying.txt).
 - The Zombie Killer: an original idea (the code is used as a reference);
 - Jimmy: bug reporting;
 - Nems: bug reporting;
-- murka: bug reporting.
+- murka: bug reporting;
+- Rowsol: feature suggestions.
