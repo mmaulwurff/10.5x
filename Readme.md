@@ -36,7 +36,8 @@ License: GPLv3 (see copying.txt).
 
 ## Thanks to
 
-- The Zombie Killer: an original idea (the code is used as a reference);
+- Cutmanmike: original idea;
+- The Zombie Killer: the code is used as a reference;
 - Jimmy: bug reporting;
 - Nems: bug reporting;
 - murka: bug reporting;
