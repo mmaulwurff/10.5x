@@ -1,2 +1,3 @@
 server int  x5_multiplier    = 100;
 server bool x5_raise_divided = false;
+server int  x5_thrust        = 2;

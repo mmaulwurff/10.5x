@@ -172,6 +172,8 @@ class x5_EventHandler : EventHandler
     spawned.target       = original.target;
     spawned.tracer       = original.tracer;
     spawned.CopyFriendliness(original, false);
+
+    spawned.Thrust(x5_thrust, random(0, 360));
   }
 
 // private: ////////////////////////////////////////////////////////////////////
