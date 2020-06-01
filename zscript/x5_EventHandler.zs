@@ -24,14 +24,24 @@ class x5_EventHandler : EventHandler
   override
   void WorldTick()
   {
-    switch (level.time)
-    {
-    case 0: break;
-    case 3: x5_Density.printMonsterDensity(); return;
-    default: return;
-    }
-
     int multiplier = x5_multiplier;
+
+    // miltiplier must work immediately, because RandomSpawners are still
+    // RandomSpawners, so they will transform to randomized enemies.
+    //
+    // divider, on the contrary, must work when RandomSpawners are already
+    // transformed to enemies.
+    int timeToAct  = (multiplier >= 100) ? 0 : 1;
+
+    if (level.time == 3)
+    {
+      x5_Density.printMonsterDensity();
+      return;
+    }
+    else if (level.time != timeToAct)
+    {
+      return;
+    }
 
     if (multiplier == 100)
     {
