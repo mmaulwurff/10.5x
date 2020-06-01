@@ -58,8 +58,10 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
     {
     case     0: mLabel = "(Play Tourism Deluxe instead!) x"; break;
     case     5: mLabel =                "(Anybody home?) x"; break;
+    case    50: mLabel = "       (Half-Life? Half: dead) x"; break;
     case   100: mLabel =                     "(Standard) x"; break;
     case   200: mLabel =               "(Double trouble) x"; break;
+    case   400: mLabel = "                (Quad Damage!) x"; break;
     case  1000: mLabel =                  "(Classic 10x) x"; break;
     case  1050: mLabel =                   "(Slaughter!) x"; break;
     case  2000: mLabel =        "(How did you get here?) x"; break;
