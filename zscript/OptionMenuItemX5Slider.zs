@@ -55,17 +55,17 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
   void setLabel(int val)
   {
     switch (val)
-    {
-    case     0: mLabel = "(Play Tourism Deluxe instead!) x"; break;
-    case     5: mLabel =                "(Anybody home?) x"; break;
-    case    50: mLabel = "       (Half-Life? Half: dead) x"; break;
-    case   100: mLabel =                     "(Standard) x"; break;
-    case   200: mLabel =               "(Double trouble) x"; break;
-    case   400: mLabel = "                (Quad Damage!) x"; break;
-    case  1000: mLabel =                  "(Classic 10x) x"; break;
-    case  1050: mLabel =                   "(Slaughter!) x"; break;
-    case  2000: mLabel =        "(How did you get here?) x"; break;
-    case 10000: mLabel =              "(Are you insane?) x"; break;
+  {
+    case     0: mLabel = "$0X_TOURIST"; break;
+    case     5: mLabel =                "$5X_ANYBODY"; break;
+	case    50: mLabel = "$X_HALFDEAD"; break;
+    case   100: mLabel =                     "$X_STANDARD"; break;
+    case   200: mLabel =               "$X_DOUBLETROUBLE"; break;
+	case   400: mLabel = "$X_QUADDAMAGE"; break;
+    case  1000: mLabel =                  "$X_CLASSIC10X"; break;
+    case  1050: mLabel =                   "$X_SLAUGHTER"; break;
+    case  2000: mLabel =        "$X_HOWDIDYOUGETHERE"; break;
+    case 10000: mLabel =              "$X_AREYOUINSANE"; break;
     default:    mLabel =                                "x"; break;
     }
   }
