@@ -54,19 +54,29 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
   private
   void setLabel(int val)
   {
-    switch (val)
+    String specialLabel = getSpecialLabel(val);
+
+    mLabel = (specialLabel.length() > 0)
+      ? String.Format("(%s) x", StringTable.Localize(specialLabel, false))
+      : "x";
+  }
+
+  private static
+  String getSpecialLabel(int val)
   {
-    case     0: mLabel = "$0X_TOURIST"; break;
-    case     5: mLabel =                "$5X_ANYBODY"; break;
-	case    50: mLabel = "$X_HALFDEAD"; break;
-    case   100: mLabel =                     "$X_STANDARD"; break;
-    case   200: mLabel =               "$X_DOUBLETROUBLE"; break;
-	case   400: mLabel = "$X_QUADDAMAGE"; break;
-    case  1000: mLabel =                  "$X_CLASSIC10X"; break;
-    case  1050: mLabel =                   "$X_SLAUGHTER"; break;
-    case  2000: mLabel =        "$X_HOWDIDYOUGETHERE"; break;
-    case 10000: mLabel =              "$X_AREYOUINSANE"; break;
-    default:    mLabel =                                "x"; break;
+    switch(val)
+    {
+    case     0: return "X_000";
+    case     5: return "X_005";
+    case    50: return "X_050";
+    case   100: return "X_100";
+    case   200: return "X_200";
+    case   400: return "X_400";
+    case  1000: return "X_1000";
+    case  1050: return "X_1050";
+    case  2000: return "X_2000";
+    case 10000: return "X_10000";
+    default:    return "";
     }
   }
 

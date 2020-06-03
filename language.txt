@@ -1,12 +1,13 @@
 [enu default]
+
 // X Tag
-0X_TOURIST = "(Play Tourism Deluxe instead!)";
-5X_ANYBODY = "(Anybody home?) x";
-X_HALFDEAD = "       (Half-Life? Half: dead) x";
-X_STANDARD = "(Standard) x";
-X_DOUBLETROUBLE = "(Double trouble) x";
-X_QUADDAMAGE = "                (Quad Damage!) x";
-X_CLASSIC10X = "(Classic 10x) x";
-X_SLAUGHTER = "(Slaughter!) x";
-X_HOWDIDYOUGETHERE = "(How did you get here?) x";
-X_AREYOUINSANE = "(Are you insane?) x";
+X_000   = "Play Tourism Deluxe instead!";
+X_005   = "Anybody home?";
+X_050   = "Half-Life? Half: dead";
+X_100   = "Standard";
+X_200   = "Double trouble";
+X_400   = "Quad Damage!";
+X_1000  = "Classic 10x";
+X_1050  = "Slaughter!";
+X_2000  = "How did you get here?";
+X_10000 = "Are you insane?";
