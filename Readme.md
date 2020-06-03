@@ -41,4 +41,5 @@ License: GPLv3 (see copying.txt).
 - Jimmy: bug reporting;
 - Nems: bug reporting;
 - murka: bug reporting;
-- Rowsol: feature suggestions.
+- Rowsol: feature suggestions;
+- Blueberryy: translation support and Russian translation.
