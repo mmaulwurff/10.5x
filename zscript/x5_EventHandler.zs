@@ -183,7 +183,12 @@ class x5_EventHandler : EventHandler
     spawned.tracer       = original.tracer;
     spawned.CopyFriendliness(original, false);
 
-    spawned.Thrust(x5_thrust, random(0, 360));
+    if (!(spawned is "RandomSpawner"))
+    {
+      int thrust = x5_thrust * 50 / spawned.mass;
+      spawned.Thrust(thrust, random(0, 360));
+      spawned.vel.z = thrust;
+    }
   }
 
 // private: ////////////////////////////////////////////////////////////////////
