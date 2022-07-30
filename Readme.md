@@ -43,3 +43,4 @@ License: GPLv3 (see copying.txt).
 - murka: bug reporting;
 - Rowsol: feature suggestions;
 - Blueberryy: translation support and Russian translation.
+- generic name guy: Brazilian Portuguese localization.

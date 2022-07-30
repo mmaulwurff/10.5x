@@ -25,3 +25,16 @@ X_1000  = "Классический 10x";
 X_1050  = "Резня!";
 X_2000  = "Как вы сюда попали?";
 X_10000 = "С ума сошли?";
+
+[ptb]
+
+// X Tag
+X_000   = "Vai jogar Tourism Deluxe!";
+X_005   = "Alguém em casa?";
+X_050   = "Half-Life? Half: morto";
+X_100   = "Normal";
+X_200   = "Problema em dobro";
+X_1000  = "Clássico 10x";
+X_1050  = "Matança!";
+X_2000  = "Como você chegou aqui?";
+X_10000 = "Você é louco?";
