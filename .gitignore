@@ -8,7 +8,10 @@
 !.gitignore
 !.gitattributes
 
-!**.txt
-!**.md
-!**.zs
-!**.sh
+!*.txt
+!*.md
+!*.zs
+
+# But do ignore this:
+
+changelog.txt
