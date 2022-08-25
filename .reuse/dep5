@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: 10.5x
+Upstream-Contact: Alexander Kromm <mmaulwurff@gmail.com>
+Source: 'https://forum.zdoom.org/viewtopic.php?t=65962'
+
+# Sample paragraph, commented out:
+#
+# Files: src/*
+# Copyright: $YEAR $NAME <$CONTACT>
+# License: ...

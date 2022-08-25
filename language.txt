@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: 2020 Alexander Kromm <mmaulwurff@gmail.com>
+// SPDX-FileCopyrightText: 2020 Blueberryy
+// SPDX-FileCopyrightText: 2022 generic name guy
+// SPDX-License-Identifier: CC0-1.0
+
 [enu default]
 
 // X Tag

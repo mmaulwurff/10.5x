@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: 2020 Alexander Kromm <mmaulwurff@gmail.com>
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # x10.5
 
 Enemy multiplier mod for GZDoom.
