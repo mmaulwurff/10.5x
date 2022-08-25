@@ -24,18 +24,11 @@ class x5_Killer : Inventory
   {
     Super.Tick();
 
-    if (Owner != null)
-    {
-      state spawnState = Owner.FindState("Spawn");
-      state idleState = Owner.FindState("Idle");
-      if (!Owner.InStateSequence(Owner.CurState, spawnState)
-          && !Owner.InStateSequence(Owner.CurState, idleState))
-      {
-        Owner.A_Die();
-        Owner.bCorpse = x5_raise_divided;
-        Destroy();
-      }
-    }
+    if (owner == NULL || owner.target == NULL) return;
+
+    owner.A_Die();
+    owner.bCorpse = x5_raise_divided;
+    destroy();
   }
 
 } // class x5_Killer
