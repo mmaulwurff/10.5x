@@ -4,10 +4,7 @@
 class x5_Density play
 {
 
-// public: /////////////////////////////////////////////////////////////////////
-
-  static
-  void printMonsterDensity()
+  static void printMonsterDensity()
   {
     let message = "Estimated enemy density: %.3f, health: %.3f.";
 

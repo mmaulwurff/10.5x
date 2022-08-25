@@ -5,8 +5,6 @@
 class x5_EventHandler : EventHandler
 {
 
-// public: // EventHandler /////////////////////////////////////////////////////
-
   // miltiplier must work immediately, because RandomSpawners are still
   // RandomSpawners, so they will transform to randomized enemies.
   //
@@ -19,8 +17,7 @@ class x5_EventHandler : EventHandler
     TIME_TO_PRINT    = 5
   }
 
-  override
-  void WorldTick()
+  override void WorldTick()
   {
     int multiplier = x5_multiplier;
     int timeToAct  = (multiplier >= 100) ? TIME_TO_MULTIPLY : TIME_TO_DIVIDE;
@@ -119,8 +116,7 @@ class x5_EventHandler : EventHandler
     }
   }
 
-  override
-  void WorldThingSpawned(WorldEvent event)
+  override void WorldThingSpawned(WorldEvent event)
   {
     let thing = event.thing;
     if (thing == NULL)
@@ -136,8 +132,7 @@ class x5_EventHandler : EventHandler
 
 // private: ////////////////////////////////////////////////////////////////////
 
-  private
-  void clone(Actor original)
+  private void clone(Actor original)
   {
     original.bThruSpecies = true;
 

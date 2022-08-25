@@ -4,8 +4,6 @@
 class x5_Killer : Inventory
 {
 
-// public: /////////////////////////////////////////////////////////////////////
-
   override void Tick()
   {
     Super.Tick();

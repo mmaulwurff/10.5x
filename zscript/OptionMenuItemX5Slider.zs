@@ -4,8 +4,6 @@
 class OptionMenuItemX5Slider : OptionMenuItemSlider
 {
 
-// public: /////////////////////////////////////////////////////////////////////
-
   OptionMenuItemX5Slider Init( String label
                              , Name   command
                              , double min
@@ -19,16 +17,12 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
     return self;
   }
 
-// public: // OptionMenuItemSlider /////////////////////////////////////////////
-
-  override
-  double getSliderValue()
+  override double getSliderValue()
   {
     return (mCVar.getInt() / 100.0);
   }
 
-  override
-  void setSliderValue(double val)
+  override void setSliderValue(double val)
   {
     int v = int(round(val * 100));
     mCvar.setInt(v);
