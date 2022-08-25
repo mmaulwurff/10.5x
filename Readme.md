@@ -30,22 +30,11 @@ Make anything into a slaughtermap, or make nuts.wad not melt your CPU, all from 
 - Doesn't affect enemies spawned after the map is loaded;
 - Doesn't work with Zandronum.
 
-## Info
+## Acknowledgments
 
-Author: m8f
-License: GPLv3 (see copying.txt).
-
-[Git](https://github.com/mmaulwurff/10.5x)
-
-[Forum topic](https://forum.zdoom.org/viewtopic.php?f=43&t=65962#p1119733)
-
-## Thanks to
-
-- Cutmanmike: original idea;
-- The Zombie Killer: the code is used as a reference;
-- Jimmy: bug reporting;
-- Nems: bug reporting;
-- murka: bug reporting;
-- Rowsol: feature suggestions;
-- Blueberryy: translation support and Russian translation.
-- generic name guy: Brazilian Portuguese localization.
+- Original idea: Cutmanmike;
+- Code used as a reference: The Zombie Killer;
+- Bug reporting: Jimmy, Nems, murka, Arkezuli, Nightsentinel;
+- Feature suggestions: Rowsol;
+- Translation support and Russian translation: Blueberryy;
+- Brazilian Portuguese localization: generic name guy.
