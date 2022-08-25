@@ -185,7 +185,7 @@ class x5_EventHandler : EventHandler
 
     if (!(spawned is "RandomSpawner"))
     {
-      int thrust = x5_thrust * 50 / spawned.mass;
+      int thrust = clamp(x5_thrust * 50 / spawned.mass, 2, 10);
       spawned.Thrust(thrust, random(0, 360));
       spawned.vel.z = thrust;
     }
