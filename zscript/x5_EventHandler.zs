@@ -21,19 +21,25 @@ class x5_EventHandler : EventHandler
 
 // public: // EventHandler /////////////////////////////////////////////////////
 
+  // miltiplier must work immediately, because RandomSpawners are still
+  // RandomSpawners, so they will transform to randomized enemies.
+  //
+  // divider, on the contrary, must work when RandomSpawners and other spawners
+  // are already transformed to enemies.
+  enum ActTimes
+  {
+    TIME_TO_MULTIPLY = 0,
+    TIME_TO_DIVIDE   = 4,
+    TIME_TO_PRINT    = 5
+  }
+
   override
   void WorldTick()
   {
     int multiplier = x5_multiplier;
+    int timeToAct  = (multiplier >= 100) ? TIME_TO_MULTIPLY : TIME_TO_DIVIDE;
 
-    // miltiplier must work immediately, because RandomSpawners are still
-    // RandomSpawners, so they will transform to randomized enemies.
-    //
-    // divider, on the contrary, must work when RandomSpawners are already
-    // transformed to enemies.
-    int timeToAct  = (multiplier >= 100) ? 0 : 1;
-
-    if (level.time == 3)
+    if (level.time == TIME_TO_PRINT)
     {
       x5_Density.printMonsterDensity();
       return;
