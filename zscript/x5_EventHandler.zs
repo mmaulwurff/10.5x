@@ -38,12 +38,13 @@ class x5_EventHandler : EventHandler
     }
 
     let iterator = ThinkerIterator.Create("Actor");
-    Actor monster;
-    while (monster = Actor(iterator.Next()))
+    Actor anActor;
+    while (anActor = Actor(iterator.Next()))
     {
-      if (GetDefaultByType(Actor.GetReplacee(monster.GetClassName())).bIsMonster)
+      let defaultReplacee = getDefaultByType(Actor.getReplacee(anActor.getClassName()));
+      if (defaultReplacee.bIsMonster && !defaultReplacee.bFriendly)
       {
-        monsters.Push(monster);
+        monsters.push(anActor);
       }
     }
 
