@@ -12,15 +12,18 @@ class x5_EventHandler : EventHandler
   // are already transformed to enemies.
   enum ActTimes
   {
-    TIME_TO_MULTIPLY = 0,
-    TIME_TO_DIVIDE   = 4,
-    TIME_TO_PRINT    = 5
+    BEFORE_RANDOMIZED = 0,
+    AFTER_RANDOMIZED  = 4,
+    TIME_TO_PRINT     = 5
   }
 
   override void WorldTick()
   {
     int multiplier = x5_multiplier;
-    int timeToAct  = (multiplier >= 100) ? TIME_TO_MULTIPLY : TIME_TO_DIVIDE;
+    int timeToAct  = (multiplier >= 100) ? BEFORE_RANDOMIZED : AFTER_RANDOMIZED;
+
+    if (level.time == AFTER_RANDOMIZED + 1 && multiplier > 100)
+      nudgeCloned();
 
     if (level.time == TIME_TO_PRINT)
     {
@@ -42,7 +45,7 @@ class x5_EventHandler : EventHandler
     while (anActor = Actor(iterator.Next()))
     {
       let defaultReplacee = getDefaultByType(Actor.getReplacee(anActor.getClassName()));
-      if (defaultReplacee.bIsMonster && !defaultReplacee.bFriendly)
+      if (isCloneable(defaultReplacee))
       {
         monsters.push(anActor);
       }
@@ -170,16 +173,66 @@ class x5_EventHandler : EventHandler
     spawned.target       = original.target;
     spawned.tracer       = original.tracer;
     spawned.CopyFriendliness(original, false);
-
-    if (!(spawned is "RandomSpawner"))
-    {
-      int thrust = clamp(x5_thrust * 50 / spawned.mass, 2, 10);
-      spawned.Thrust(thrust, random(0, 360));
-      spawned.vel.z = thrust;
-    }
   }
 
 // private: ////////////////////////////////////////////////////////////////////
+
+  private static bool isCloneable(readonly<Actor> anActor)
+  {
+    return anActor.bIsMonster && !anActor.bFriendly;
+  }
+
+  private static void nudgeCloned()
+  {
+    Dictionary occupiedPositions = Dictionary.create();
+
+    let iterator = ThinkerIterator.Create("Actor");
+    Actor anActor;
+    while (anActor = Actor(iterator.Next()))
+    {
+      anActor.bThruSpecies = true;
+      if (!isCloneable(getDefaultByType(anActor.getClass()))) continue;
+
+      string positionString = string.format("%f-%f-%f", anActor.pos.x, anActor.pos.y, anActor.pos.z);
+
+      // If this position isn't occupied, remember it. If it is, nudge.
+      if (occupiedPositions.at(positionString).length() == 0)
+        occupiedPositions.insert(positionString, ".");
+      else
+        nudge(anActor);
+    }
+  }
+
+  private static void nudge(Actor anActor)
+  {
+    double distance   = anActor.radius * 3;
+    int    startAngle = random(-180, 180);
+    for (int deltaAngle = 0; deltaAngle <= 360; deltaAngle += 10)
+    {
+      double  angle = Actor.normalize180(startAngle + deltaAngle);
+      vector3 move  = distance * (cos(angle), sin(angle), 0);
+
+      if (!anActor.checkMove(anActor.pos.xy + move.xy, PCM_NoActors)) continue;
+
+      vector3 oldPos = anActor.pos;
+      anActor.setOrigin(oldPos + move, true);
+
+      // Free if can move in at least one direction.
+      bool isFree = false;
+      for (int checkAngle = -180; checkAngle <= 180; checkAngle += 10)
+      {
+        if (!anActor.checkMove(anActor.pos.xy + (cos(checkAngle), sin(checkAngle)))) continue;
+
+        isFree = true;
+        break;
+      }
+
+      if (isFree) break;
+
+      // If stuck, go back, try again.
+      anActor.setOrigin(oldPos, true);
+    }
+  }
 
   private Array<Actor> monsters;
   private Array<String> classes;

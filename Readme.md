@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2020 Alexander Kromm <mmaulwurff@gmail.com>
+SPDX-FileCopyrightText: 2020, 2022 Alexander Kromm <mmaulwurff@gmail.com>
 SPDX-License-Identifier: CC0-1.0
 -->
 
@@ -19,7 +19,6 @@ Make anything into a slaughtermap, or make nuts.wad not melt your CPU, all from 
 - The number of enemies is decreased for each enemy class separately;
 - Prints estimated enemy density on level start;
 - Works with monster randomizers;
-- Small initial thrust to cloned enemies (controlled by x5_thrust CVar);
 - Bonus option: optional resurrection of autokilled enemies (x5_raise_divided CVar).
 
 ## Anti-features
@@ -34,7 +33,7 @@ Make anything into a slaughtermap, or make nuts.wad not melt your CPU, all from 
 
 - Original idea: Cutmanmike;
 - Code used as a reference: The Zombie Killer;
-- Bug reporting: Jimmy, Nems, murka, Arkezuli, Nightsentinel;
+- Bug reporting: Jimmy, Nems, murka, Arkezuli, Nightsentinel, Rowsol.
 - Feature suggestions: Rowsol;
 - Translation support and Russian translation: Blueberryy;
 - Brazilian Portuguese localization: generic name guy.
