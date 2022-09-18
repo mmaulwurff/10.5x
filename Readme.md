@@ -37,3 +37,10 @@ Make anything into a slaughtermap, or make nuts.wad not melt your CPU, all from 
 - Feature suggestions: Rowsol;
 - Translation support and Russian translation: Blueberryy;
 - Brazilian Portuguese localization: generic name guy.
+
+## Meta
+
+- Contribution guidelines: [Contributor Covenant](./code_of_conduct.md)
+- Code license: GPLv3
+- Author: m8f
+- Project pages: [ZDoom Forums](https://forum.zdoom.org/viewtopic.php?f=43&t=65962), [Codeberg](https://codeberg.org/m8f/10.5x), [GitHub](https://github.com/mmaulwurff/10.5x)
