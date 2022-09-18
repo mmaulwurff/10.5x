@@ -41,6 +41,7 @@ Make anything into a slaughtermap, or make nuts.wad not melt your CPU, all from 
 ## Meta
 
 - Contribution guidelines: [Contributor Covenant](./code_of_conduct.md)
-- Code license: GPLv3
+- Code license: [GPLv3 or later](./LICENSES/GPL-3.0-or-later.txt)
 - Author: m8f
 - Project pages: [ZDoom Forums](https://forum.zdoom.org/viewtopic.php?f=43&t=65962), [Codeberg](https://codeberg.org/m8f/10.5x), [GitHub](https://github.com/mmaulwurff/10.5x)
+- Umbrella project: [m8f's toolbox](https://mmaulwurff.github.io/pages/toolbox.html)
