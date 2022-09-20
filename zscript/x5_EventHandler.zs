@@ -179,7 +179,7 @@ class x5_EventHandler : EventHandler
 
   private static bool isCloneable(readonly<Actor> anActor)
   {
-    return anActor.bIsMonster && !anActor.bFriendly;
+    return anActor.bIsMonster && !anActor.bFriendly && anActor.bCountKill;
   }
 
   private static void nudgeCloned()
