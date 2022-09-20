@@ -5,11 +5,11 @@
 class x5_EventHandler : EventHandler
 {
 
-  // miltiplier must work immediately, because RandomSpawners are still
+  // The multiplier must work immediately, because RandomSpawners are still
   // RandomSpawners, so they will transform to randomized enemies.
   //
-  // divider, on the contrary, must work when RandomSpawners and other spawners
-  // are already transformed to enemies.
+  // The divider, on the contrary, must work when RandomSpawners and other
+  // spawners are already transformed to enemies.
   enum ActTimes
   {
     BEFORE_RANDOMIZED = 0,
@@ -159,7 +159,7 @@ class x5_EventHandler : EventHandler
     spawned.special1     = original.special1;
     spawned.special2     = original.special2;
     // MTF_SECRET needs special treatment to avoid incrementing the secret
-    // counter twice. It haoriginal.d already been processed for the spawner itself.
+    // counter twice. It had already been processed for the spawner itself.
     spawned.SpawnFlags   = original.SpawnFlags & ~MTF_SECRET;
     spawned.HandleSpawnFlags();
 
