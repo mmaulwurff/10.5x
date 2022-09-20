@@ -7,7 +7,6 @@ kanban-plugin: basic
 ## to do
 
 - [ ] [[Add a MaxMonsterCount option]]
-- [ ] [[Strife - multiplier doesn't work on maps in a hub]]
 - [ ] [[individual sliders for each monster class]]
 
 
@@ -17,6 +16,7 @@ kanban-plugin: basic
 
 ## done
 
+- [ ] [[Strife - multiplier doesn't work on maps in a hub]]
 - [ ] [[add a check to not multiply non-counting monsters]]
 
 

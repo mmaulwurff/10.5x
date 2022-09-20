@@ -22,15 +22,15 @@ class x5_EventHandler : EventHandler
     int multiplier = x5_multiplier;
     int timeToAct  = (multiplier >= 100) ? BEFORE_RANDOMIZED : AFTER_RANDOMIZED;
 
-    if (level.time == AFTER_RANDOMIZED + 1 && multiplier > 100)
+    if (level.maptime == AFTER_RANDOMIZED + 1 && multiplier > 100)
       nudgeCloned();
 
-    if (level.time == TIME_TO_PRINT)
+    if (level.maptime == TIME_TO_PRINT)
     {
       x5_Density.printMonsterDensity();
       return;
     }
-    else if (level.time != timeToAct)
+    else if (level.maptime != timeToAct)
     {
       return;
     }
