@@ -1,7 +1,6 @@
 // SPDX-FileCopyrightText: 2019-2020, 2022 Alexander Kromm <mmaulwurff@gmail.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-// It should be illegal to write code like this.
 class x5_EventHandler : EventHandler
 {
 
@@ -40,6 +39,8 @@ class x5_EventHandler : EventHandler
       return;
     }
 
+    Array<Actor> monsters;
+
     let iterator = ThinkerIterator.Create("Actor");
     Actor anActor;
     while (anActor = Actor(iterator.Next()))
@@ -51,11 +52,11 @@ class x5_EventHandler : EventHandler
       }
     }
 
+    Array<String> classes;
     int integerMultiplier = multiplier / 100;
     int nCopies = integerMultiplier - 1;
-    for (uint i = 0; i < monsters.size(); ++i)
+    foreach (monster : monsters)
     {
-      let monster = monsters[i];
       String className = monster.GetClassName();
       if (classes.Find(className) == classes.size())
       {
@@ -70,22 +71,19 @@ class x5_EventHandler : EventHandler
 
     double fractionMultiplier = (multiplier % 100) * 0.01;
 
-    for (uint i = 0; i < classes.size(); ++i)
+    foreach (className : classes)
     {
-      String className = classes[i];
       Array<Actor> monstersByClass;
-      monstersByClass.Clear(); // array is not cleared on next iteration.
-      for (uint i = 0; i < monsters.size(); ++i)
+      foreach (monster : monsters)
       {
-        if (monsters[i].GetClassName() == className)
+        if (monster.GetClassName() == className)
         {
-          monstersByClass.Push(monsters[i]);
+          monstersByClass.Push(monster);
         }
       }
 
       uint nMonstersInClass = monstersByClass.size();
       Array<Actor> shuffled;
-      shuffled.Clear();
       shuffled.Resize(nMonstersInClass);
       for (uint i = 0; i < nMonstersInClass; ++i)
       {
@@ -123,12 +121,8 @@ class x5_EventHandler : EventHandler
   override void WorldThingSpawned(WorldEvent event)
   {
     let thing = event.thing;
-    if (thing == NULL)
-    {
-      return;
-    }
 
-    if (thing.bMissile && x5_multiplier > 100)
+    if (thing != NULL && thing.bMissile && x5_multiplier > 100)
     {
       thing.bMThruSpecies = true;
     }
@@ -233,8 +227,5 @@ class x5_EventHandler : EventHandler
       anActor.setOrigin(oldPos, true);
     }
   }
-
-  private Array<Actor> monsters;
-  private Array<String> classes;
 
 } // class x5_EventHandler
