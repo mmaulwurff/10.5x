@@ -8,7 +8,7 @@ class x5_Killer : Inventory
   {
     Super.Tick();
 
-    if (owner == NULL || owner.target == NULL) return;
+    if (owner == NULL || owner.target == NULL) { return; }
 
     owner.A_Die();
     owner.bCorpse = x5_raise_divided;

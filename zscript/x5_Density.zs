@@ -15,7 +15,7 @@ class x5_Density play
     int maxX;
     int maxY;
     bool isFirst = true;
-    let i = ThinkerIterator.Create("Actor");
+    let i        = ThinkerIterator.Create("Actor");
     Actor mo;
     while (mo = Actor(i.Next()))
     {
@@ -37,10 +37,10 @@ class x5_Density play
         continue;
       }
 
-      if      (mo.pos.x < minX) { minX = int(mo.pos.x); }
+      if (mo.pos.x < minX) { minX = int(mo.pos.x); }
       else if (mo.pos.x > maxX) { maxX = int(mo.pos.x); }
 
-      if      (mo.pos.y < minY) { minY = int(mo.pos.y); }
+      if (mo.pos.y < minY) { minY = int(mo.pos.y); }
       else if (mo.pos.y > maxY) { maxY = int(mo.pos.y); }
     }
 
@@ -57,7 +57,7 @@ class x5_Density play
     int area = (maxX - minX) * (maxY - minY);
 
     double density       = double(nMonsters) / area / 0.113281; // Doom E1M1 UV
-    double healthDensity = double(nHealth)   / area / 3.515625; // Doom E1M1 UV
+    double healthDensity = double(nHealth) / area / 3.515625;   // Doom E1M1 UV
     Console.Printf(message, density, healthDensity);
   }
 

@@ -14,30 +14,23 @@ class x5_EventHandler : EventHandler
     BEFORE_RANDOMIZED = 0,
     AFTER_RANDOMIZED  = 4,
     TIME_TO_PRINT     = 5
-  }
+  };
 
   override void WorldTick()
   {
     int multiplier = x5_multiplier;
     int timeToAct  = (multiplier >= 100) ? BEFORE_RANDOMIZED : AFTER_RANDOMIZED;
 
-    if (level.maptime == AFTER_RANDOMIZED + 1 && multiplier > 100)
-      nudgeCloned();
+    if (level.maptime == AFTER_RANDOMIZED + 1 && multiplier > 100) { nudgeCloned(); }
 
     if (level.maptime == TIME_TO_PRINT)
     {
       x5_Density.printMonsterDensity();
       return;
     }
-    else if (level.maptime != timeToAct)
-    {
-      return;
-    }
+    else if (level.maptime != timeToAct) { return; }
 
-    if (multiplier == 100)
-    {
-      return;
-    }
+    if (multiplier == 100) { return; }
 
     Array<Actor> monsters;
 
@@ -46,22 +39,16 @@ class x5_EventHandler : EventHandler
     while (anActor = Actor(iterator.Next()))
     {
       let defaultReplacee = getDefaultByType(Actor.getReplacee(anActor.getClassName()));
-      if (isCloneable(defaultReplacee))
-      {
-        monsters.push(anActor);
-      }
+      if (isCloneable(defaultReplacee)) { monsters.push(anActor); }
     }
 
     Array<String> classes;
     int integerMultiplier = multiplier / 100;
-    int nCopies = integerMultiplier - 1;
+    int nCopies           = integerMultiplier - 1;
     foreach (monster : monsters)
     {
       String className = monster.GetClassName();
-      if (classes.Find(className) == classes.size())
-      {
-        classes.Push(className);
-      }
+      if (classes.Find(className) == classes.size()) { classes.Push(className); }
 
       for (int c = 0; c < nCopies; ++c)
       {
@@ -76,10 +63,7 @@ class x5_EventHandler : EventHandler
       Array<Actor> monstersByClass;
       foreach (monster : monsters)
       {
-        if (monster.GetClassName() == className)
-        {
-          monstersByClass.Push(monster);
-        }
+        if (monster.GetClassName() == className) { monstersByClass.Push(monster); }
       }
 
       uint nMonstersInClass = monstersByClass.size();
@@ -122,61 +106,61 @@ class x5_EventHandler : EventHandler
   {
     let thing = event.thing;
 
-    if (thing != NULL && thing.bMissile && x5_multiplier > 100)
-    {
-      thing.bMThruSpecies = true;
-    }
+    if (thing != NULL && thing.bMissile && x5_multiplier > 100) { thing.bMThruSpecies = true; }
   }
 
-// private: ////////////////////////////////////////////////////////////////////
+  // private: ////////////////////////////////////////////////////////////////////
 
-  private void clone(Actor original)
+  private
+  void clone(Actor original)
   {
     original.bThruSpecies = true;
 
-    let spawned = Actor.Spawn(original.GetClassName(), original.Pos);
-    spawned.bAmbush = original.bAmbush;
+    let spawned          = Actor.Spawn(original.GetClassName(), original.Pos);
+    spawned.bAmbush      = original.bAmbush;
     spawned.bThruSpecies = true;
 
     // copied from randomspawner.zs
-    spawned.SpawnAngle   = original.SpawnAngle;
-    spawned.Angle        = original.Angle;
-    spawned.Pitch        = original.Pitch;
-    spawned.Roll         = original.Roll;
-    spawned.SpawnPoint   = original.SpawnPoint;
-    spawned.special      = original.special;
-    spawned.args[0]      = original.args[0];
-    spawned.args[1]      = original.args[1];
-    spawned.args[2]      = original.args[2];
-    spawned.args[3]      = original.args[3];
-    spawned.args[4]      = original.args[4];
-    spawned.special1     = original.special1;
-    spawned.special2     = original.special2;
+    spawned.SpawnAngle = original.SpawnAngle;
+    spawned.Angle      = original.Angle;
+    spawned.Pitch      = original.Pitch;
+    spawned.Roll       = original.Roll;
+    spawned.SpawnPoint = original.SpawnPoint;
+    spawned.special    = original.special;
+    spawned.args[0]    = original.args[0];
+    spawned.args[1]    = original.args[1];
+    spawned.args[2]    = original.args[2];
+    spawned.args[3]    = original.args[3];
+    spawned.args[4]    = original.args[4];
+    spawned.special1   = original.special1;
+    spawned.special2   = original.special2;
     // MTF_SECRET needs special treatment to avoid incrementing the secret
     // counter twice. It had already been processed for the spawner itself.
-    spawned.SpawnFlags   = original.SpawnFlags & ~MTF_SECRET;
+    spawned.SpawnFlags = original.SpawnFlags & ~MTF_SECRET;
     spawned.HandleSpawnFlags();
 
     spawned.SpawnFlags   = original.SpawnFlags;
     // "Transfer" count secret flag to spawned actor
     spawned.bCountSecret = original.SpawnFlags & MTF_SECRET;
     spawned.ChangeTid(original.tid);
-    spawned.Vel          = original.Vel;
+    spawned.Vel    = original.Vel;
     // For things such as DamageMaster/DamageChildren, transfer mastery.
-    spawned.master       = original.master;
-    spawned.target       = original.target;
-    spawned.tracer       = original.tracer;
+    spawned.master = original.master;
+    spawned.target = original.target;
+    spawned.tracer = original.tracer;
     spawned.CopyFriendliness(original, false);
   }
 
-// private: ////////////////////////////////////////////////////////////////////
+  // private: ////////////////////////////////////////////////////////////////////
 
-  private static bool isCloneable(readonly<Actor> anActor)
+  private
+  static bool isCloneable(readonly<Actor> anActor)
   {
     return anActor.bIsMonster && !anActor.bFriendly && anActor.bCountKill;
   }
 
-  private static void nudgeCloned()
+  private
+  static void nudgeCloned()
   {
     Dictionary occupiedPositions = Dictionary.create();
 
@@ -185,28 +169,31 @@ class x5_EventHandler : EventHandler
     while (anActor = Actor(iterator.Next()))
     {
       anActor.bThruSpecies = true;
-      if (!isCloneable(getDefaultByType(anActor.getClass()))) continue;
+      if (!isCloneable(getDefaultByType(anActor.getClass()))) { continue; }
 
-      string positionString = string.format("%f-%f-%f", anActor.pos.x, anActor.pos.y, anActor.pos.z);
+      string positionString
+      = string.format("%f-%f-%f", anActor.pos.x, anActor.pos.y, anActor.pos.z);
 
       // If this position isn't occupied, remember it. If it is, nudge.
       if (occupiedPositions.at(positionString).length() == 0)
+      {
         occupiedPositions.insert(positionString, ".");
-      else
-        nudge(anActor);
+      }
+      else { nudge(anActor); }
     }
   }
 
-  private static void nudge(Actor anActor)
+  private
+  static void nudge(Actor anActor)
   {
-    double distance   = anActor.radius * 3;
-    int    startAngle = random(-180, 180);
+    double distance = anActor.radius * 3;
+    int startAngle  = random(-180, 180);
     for (int deltaAngle = 0; deltaAngle <= 360; deltaAngle += 10)
     {
-      double  angle = Actor.normalize180(startAngle + deltaAngle);
-      vector3 move  = distance * (cos(angle), sin(angle), 0);
+      double angle = Actor.normalize180(startAngle + deltaAngle);
+      vector3 move = distance * (cos(angle), sin(angle), 0);
 
-      if (!anActor.checkMove(anActor.pos.xy + move.xy, PCM_NoActors)) continue;
+      if (!anActor.checkMove(anActor.pos.xy + move.xy, PCM_NoActors)) { continue; }
 
       vector3 oldPos = anActor.pos;
       anActor.setOrigin(oldPos + move, true);
@@ -215,13 +202,13 @@ class x5_EventHandler : EventHandler
       bool isFree = false;
       for (int checkAngle = -180; checkAngle <= 180; checkAngle += 10)
       {
-        if (!anActor.checkMove(anActor.pos.xy + (cos(checkAngle), sin(checkAngle)))) continue;
+        if (!anActor.checkMove(anActor.pos.xy + (cos(checkAngle), sin(checkAngle)))) { continue; }
 
         isFree = true;
         break;
       }
 
-      if (isFree) break;
+      if (isFree) { break; }
 
       // If stuck, go back, try again.
       anActor.setOrigin(oldPos, true);

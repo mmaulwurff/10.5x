@@ -8,13 +8,14 @@
 !**/
 
 # and these files:
-!.gitignore
+!.clang-format
 !.gitattributes
+!.gitignore
 !dep5
 
 # and these file types:
-!*.txt
 !*.md
+!*.txt
 !*.zs
 
 # But do ignore the following files:
