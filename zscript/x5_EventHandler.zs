@@ -16,6 +16,48 @@ class x5_EventHandler : EventHandler
     TIME_TO_PRINT     = 5
   };
 
+  override void WorldLoaded(WorldEvent event)
+  {
+    mEnemyTypes = collectEnemyTypes();
+  }
+
+  override void UiTick()
+  {
+    if (mFirstTickDone) { return; }
+    mFirstTickDone = true;
+
+    if (x5_multiplier == 0)
+    {
+      if (netgame)
+      {
+        Console.Printf("10.5x: Enemy multipliers by type aren't available in multiplayer.");
+      }
+      else { openTypeMultipliersMenu(); }
+    }
+
+  }
+
+  private ui
+  void openTypeMultipliersMenu()
+  {
+    let descriptor = OptionMenuDescriptor(MenuDescriptor.GetDescriptor("x5_TypeMultipliers"));
+    descriptor.mItems.clear();
+
+    for (let i = DictionaryIterator.Create(mEnemyTypes); i.Next();)
+    {
+      Class<Actor> enemyClass = i.Key();
+      let defaultEnemy = getDefaultByType(enemyClass);
+      let slider = new("OptionMenuItemX5TypeSlider");
+      slider.Init(defaultEnemy.getTag());
+      descriptor.mItems.push(slider);
+    }
+
+    Menu.SetMenu("x5_TypeMultipliers");
+  }
+
+  private ui bool mFirstTickDone;
+  private Dictionary mEnemyTypes;
+
   override void WorldTick()
   {
     int multiplier = x5_multiplier;
@@ -213,6 +255,22 @@ class x5_EventHandler : EventHandler
       // If stuck, go back, try again.
       anActor.setOrigin(oldPos, true);
     }
+  }
+
+  private
+  static Dictionary collectEnemyTypes()
+  {
+    let result = Dictionary.Create();
+    Actor anActor;
+    for (let i = ThinkerIterator.Create("Actor"); anActor = Actor(i.Next());)
+    {
+      let replaceeType    = Actor.getReplacee(anActor.getClassName());
+      let defaultReplacee = getDefaultByType(replaceeType);
+
+      if (isCloneable(defaultReplacee)) { result.insert(replaceeType.getClassName(), ""); }
+    }
+
+    return result;
   }
 
 } // class x5_EventHandler
