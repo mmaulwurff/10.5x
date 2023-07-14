@@ -161,7 +161,7 @@ class x5_EventHandler : EventHandler
   }
 
   private
-  void collectSpawnedEnemiesByType(Class<Actor> type, out Array<Actor> enemiesByType) 
+  void collectSpawnedEnemiesByType(Class<Actor> type, out Array<Actor> enemiesByType)
   {
     foreach (spawnPoint : mSpawnPoints)
     {
@@ -202,43 +202,24 @@ class x5_EventHandler : EventHandler
 
     if (multiplier % 100 == 0) { return; }
 
+    shuffle(enemies);
+
     double fractionMultiplier = (multiplier % 100) * 0.01;
-
-    uint enemiesNumber = enemies.Size();
-    // TODO: shuffle in place.
-    Array<Actor> shuffled;
-    shuffled.Resize(enemiesNumber);
-    // Take each element and put in a random place in the shuffled array.
-    for (uint i = 0; i < enemiesNumber; ++i)
-    {
-      int r = Random[x5](0, enemiesNumber - 1);
-      // Search for the first empty place to put the element, beginning with the selected random
-      // place.
-      for (uint j = 0; j < enemiesNumber; ++j)
-      {
-        uint index = (r + j) % enemiesNumber;
-        if (shuffled[index] == NULL)
-        {
-          shuffled[index] = enemies[i];
-          break;
-        }
-      }
-    }
-
-    uint stp = uint(round(enemiesNumber * fractionMultiplier));
+    uint enemiesNumber        = enemies.Size();
+    uint stp                  = uint(round(enemiesNumber * fractionMultiplier));
 
     if (integerMultiplier >= 1) // add
     {
       for (uint i = 0; i < stp; ++i)
       {
-        clone(shuffled[i]);
+        clone(enemies[i]);
       }
     }
     else // decimate
     {
       for (uint i = stp; i < enemiesNumber; ++i)
       {
-        shuffled[i].GiveInventory("x5_Killer", 1);
+        enemies[i].GiveInventory("x5_Killer", 1);
       }
     }
   }
@@ -353,6 +334,21 @@ class x5_EventHandler : EventHandler
 
       // If stuck, go back, try again.
       anActor.setOrigin(oldPos, true);
+    }
+  }
+
+  private
+  static void shuffle(out Array<Actor> actors)
+  {
+    // Fisher-Yates shuffle.
+    uint numberOfActors = actors.size();
+    for (uint i = numberOfActors - 1; i >= 1; --i)
+    {
+      int j = Random(0, i);
+
+      let temp  = actors[i];
+      actors[i] = actors[j];
+      actors[j] = temp;
     }
   }
 
