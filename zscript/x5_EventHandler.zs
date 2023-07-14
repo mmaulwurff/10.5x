@@ -121,18 +121,20 @@ class x5_EventHandler : EventHandler
   int mMultiplyTime;
   private
   Array<x5_SpawnPoint> mSpawnPoints;
+  private bool mIsMultiplied;
 
   override void WorldTick()
   {
     // wait for type multipliers.
     if (mTypeMultipliers == NULL) { return; }
 
-    if (level.maptime > TIME_TO_RANDOMIZE)
+    if (level.maptime > TIME_TO_RANDOMIZE && !mIsMultiplied)
     {
       multiply();
       mMultiplyTime = level.maptime;
+      mIsMultiplied = true;
     }
-    else if (level.maptime > mMultiplyTime + TIME_TO_RANDOMIZE)
+    else if (level.maptime > mMultiplyTime + TIME_TO_RANDOMIZE && mIsMultiplied)
     {
       nudgeCloned();
       destroy();
