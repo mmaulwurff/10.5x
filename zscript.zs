@@ -9,4 +9,5 @@ version 4.10
 #include "zscript/x5_Density.zs"
 #include "zscript/x5_EventHandler.zs"
 #include "zscript/x5_Killer.zs"
+#include "zscript/x5_TypeMultipliersMenu.zs"
 

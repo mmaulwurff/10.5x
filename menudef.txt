@@ -8,5 +8,6 @@ AddOptionMenu OptionsMenu
 
 OptionMenu "x5_TypeMultipliers"
 {
+  Class "x5_TypeMultipliersMenu"
   Title "type"
 }
