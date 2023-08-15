@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019-2020 Alexander Kromm <mmaulwurff@gmail.com>
+// SPDX-FileCopyrightText: 2019-2020, 2023 Alexander Kromm <mmaulwurff@gmail.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 class OptionMenuItemX5Slider : OptionMenuItemSlider
@@ -33,8 +33,8 @@ class OptionMenuItemX5Slider : OptionMenuItemSlider
     String specialLabel = getSpecialLabel(val);
 
     mLabel = (specialLabel.length() > 0)
-           ? String.Format("(%s) x", StringTable.Localize(specialLabel, false))
-           : "x";
+           ? String.Format("%s 10.5x:", StringTable.Localize(specialLabel, false))
+           : "10.5x:";
   }
 
   private
