@@ -13,9 +13,6 @@ class x5_SpawnPoint
 class x5_EventHandler : EventHandler
 {
 
-  // There are mods that have randomization that takes a few tics.
-  const TIME_TO_RANDOMIZE = 4;
-
   override void WorldLoaded(WorldEvent event)
   {
     mGlobalMultiplier = x5_multiplier;
@@ -35,6 +32,50 @@ class x5_EventHandler : EventHandler
       mTypeMultipliers = fillTypeMultipliers(mEnemyTypes, mGlobalMultiplier);
     }
   }
+
+  override void UiTick()
+  {
+    if (mIsWaitingForTypeMultipliersMenu && !mIsTypeMultipliersMenuOpened)
+    {
+      mIsTypeMultipliersMenuOpened = true;
+      openTypeMultipliersMenu();
+    }
+  }
+
+  override void WorldTick()
+  {
+    // wait for type multipliers.
+    if (mTypeMultipliers == NULL) { return; }
+
+    if (level.maptime > TIME_TO_RANDOMIZE && !mIsMultiplied)
+    {
+      multiply();
+      mMultiplyTime = level.maptime;
+      mIsMultiplied = true;
+    }
+    else if (level.maptime > mMultiplyTime + TIME_TO_RANDOMIZE && mIsMultiplied)
+    {
+      nudgeCloned();
+      destroy();
+    }
+  }
+
+  override void NetworkProcess(ConsoleEvent event)
+  {
+    if (event.name.left(3) != "x5_") { return; }
+
+    mTypeMultipliers = Dictionary.FromString(event.name.Mid(3));
+  }
+
+  override void WorldThingSpawned(WorldEvent event)
+  {
+    let thing = event.thing;
+
+    // Otherwise, if two enemies share the same space, their missiles will collide immediately.
+    if (thing != NULL && thing.bMissile && x5_multiplier > 100) { thing.bMThruSpecies = true; }
+  }
+
+// private: ////////////////////////////////////////////////////////////////////////////////////////
 
   private
   static void collectSpawnPoints(out Array<x5_SpawnPoint> result)
@@ -79,32 +120,11 @@ class x5_EventHandler : EventHandler
     return result;
   }
 
-  override void UiTick()
-  {
-    if (mIsWaitingForTypeMultipliersMenu && !mIsTypeMultipliersMenuOpened)
-    {
-      mIsTypeMultipliersMenuOpened = true;
-      openTypeMultipliersMenu();
-    }
-  }
-
   private
   ui void openTypeMultipliersMenu()
   {
-    let descriptor = OptionMenuDescriptor(MenuDescriptor.GetDescriptor("x5_TypeMultipliers"));
-    descriptor.mItems.clear();
-
-    for (let i = DictionaryIterator.Create(mEnemyTypes); i.Next();)
-    {
-      Class<Actor> enemyClass = i.Key();
-      let defaultEnemy        = getDefaultByType(enemyClass);
-      let slider              = new ("OptionMenuItemX5TypeSlider");
-      slider.Init(enemyClass, defaultEnemy.getTag());
-      descriptor.mItems.push(slider);
-    }
-
     Menu.SetMenu("x5_TypeMultipliers");
-    x5_TypeMultipliersMenu(Menu.GetCurrentMenu()).setEventHandler(self);
+    x5_TypeMultipliersMenu(Menu.GetCurrentMenu()).setUp(self, mEnemyTypes);
   }
 
   private
@@ -122,31 +142,6 @@ class x5_EventHandler : EventHandler
   private
   Array<x5_SpawnPoint> mSpawnPoints;
   private bool mIsMultiplied;
-
-  override void WorldTick()
-  {
-    // wait for type multipliers.
-    if (mTypeMultipliers == NULL) { return; }
-
-    if (level.maptime > TIME_TO_RANDOMIZE && !mIsMultiplied)
-    {
-      multiply();
-      mMultiplyTime = level.maptime;
-      mIsMultiplied = true;
-    }
-    else if (level.maptime > mMultiplyTime + TIME_TO_RANDOMIZE && mIsMultiplied)
-    {
-      nudgeCloned();
-      destroy();
-    }
-  }
-
-  override void NetworkProcess(ConsoleEvent event)
-  {
-    if (event.name.left(3) != "x5_") { return; }
-
-    mTypeMultipliers = Dictionary.FromString(event.name.Mid(3));
-  }
 
   private
   void multiply()
@@ -225,15 +220,6 @@ class x5_EventHandler : EventHandler
       }
     }
   }
-
-  override void WorldThingSpawned(WorldEvent event)
-  {
-    let thing = event.thing;
-
-    if (thing != NULL && thing.bMissile && x5_multiplier > 100) { thing.bMThruSpecies = true; }
-  }
-
-  // private: ////////////////////////////////////////////////////////////////////
 
   private
   void clone(Actor original)
@@ -353,5 +339,8 @@ class x5_EventHandler : EventHandler
       actors[j] = temp;
     }
   }
+
+  // There are mods that have randomization that takes a few tics.
+  const TIME_TO_RANDOMIZE = 4;
 
 } // class x5_EventHandler

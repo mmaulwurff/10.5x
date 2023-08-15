@@ -3,12 +3,16 @@
 
 class OptionMenuItemX5TypeSlider : OptionMenuItemSlider
 {
-  OptionMenuItemX5TypeSlider Init(Class<Actor> type, String label)
+  void init(Class<Actor> type)
   {
+    let defaultEnemy = getDefaultByType(type);
+    let tag = defaultEnemy.getTag();
+    let health = defaultEnemy.Health;
+    let label = String.Format("%s (%d)", tag, health);
     Super.Init(label, "", 0, 10.5, 0.05, 2);
+
     mValue = 100;
     mType  = type;
-    return self;
   }
 
   override double getSliderValue() { return (mValue / 100.0); }

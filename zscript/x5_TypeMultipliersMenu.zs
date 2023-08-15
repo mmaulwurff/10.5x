@@ -10,7 +10,36 @@ class x5_TypeMultipliersMenu : OptionMenu
     return Super.MenuEvent(mKey, fromController);
   }
 
-  void setEventHandler(EventHandler anEventHandler) { mEventHandler = anEventHandler; }
+  void setUp(EventHandler anEventHandler, Dictionary enemyTypes)
+  {
+    mEventHandler = anEventHandler;
+
+    mDesc.mItems.clear();
+    mDesc.mSelectedItem = 0;
+
+    Array<x5_TypeSortElement> types;
+
+    for (let i = DictionaryIterator.Create(enemyTypes); i.Next();)
+    {
+      Class<Actor> enemyClass = i.Key();
+      let defaultEnemy = getDefaultByType(enemyClass);
+      let element = new("x5_TypeSortElement");
+      element.mName = defaultEnemy.getTag();
+      element.mHealth = defaultEnemy.health;
+      element.mClass = enemyClass;
+      types.push(element);
+    }
+
+    sortTypes(types);
+
+    foreach (element : types)
+    {
+      let slider = new ("OptionMenuItemX5TypeSlider");
+      slider.Init(element.mClass);
+
+      mDesc.mItems.push(slider);
+    }
+  }
 
   // private: //////////////////////////////////////////////////////////////////////////////////////
 
@@ -18,8 +47,7 @@ class x5_TypeMultipliersMenu : OptionMenu
   void report()
   {
     Dictionary typeMultipliers = Dictionary.Create();
-    let menuDescriptor = OptionMenuDescriptor(MenuDescriptor.GetDescriptor("x5_TypeMultipliers"));
-    foreach (menuItem : menuDescriptor.mItems)
+    foreach (menuItem : mDesc.mItems)
     {
       let slider = OptionMenuItemX5TypeSlider(menuItem);
       typeMultipliers.Insert(slider.getType().GetClassName(),
@@ -31,5 +59,46 @@ class x5_TypeMultipliersMenu : OptionMenu
   }
 
   private
+  void sortTypes(out Array<x5_TypeSortElement> types)
+  {
+    // Gnome sort (stupid sort): https://en.wikipedia.org/wiki/Gnome_sort
+
+    let pos    = 0;
+    let length = types.size();
+
+    while (pos < length)
+    {
+      if (pos == 0 || isGreaterOrEqual(types[pos], types[pos - 1])) { ++pos; }
+      else
+      {
+        // swap
+        let tmp        = types[pos];
+        types[pos]     = types[pos - 1];
+        types[pos - 1] = tmp;
+
+        --pos;
+      }
+    }
+  }
+
+  private
+
+  private
+  bool isGreaterOrEqual(x5_TypeSortElement element1, x5_TypeSortElement element2)
+  {
+    if (element1.mHealth > element2.mHealth) { return true; }
+    if (element1.mHealth == element2.mHealth && element1.mName >= element2.mName) { return true; }
+
+    return false;
+  }
+
+  private
   EventHandler mEventHandler;
+}
+
+class x5_TypeSortElement
+{
+  String mName;
+  int mHealth;
+  Class<Actor> mClass;
 }
