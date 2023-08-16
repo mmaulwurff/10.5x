@@ -5,3 +5,9 @@ AddOptionMenu OptionsMenu
 {
   X5Slider "x", x5_multiplier, 0, 10.5, 0.05, 2
 }
+
+OptionMenu "x5_TypeMultipliers"
+{
+  Class "x5_TypeMultipliersMenu"
+  Title "type"
+}

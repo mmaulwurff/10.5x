@@ -1,115 +1,225 @@
-// SPDX-FileCopyrightText: 2019-2020, 2022 Alexander Kromm <mmaulwurff@gmail.com>
+// SPDX-FileCopyrightText: 2019-2020, 2022-2023 Alexander Kromm <mmaulwurff@gmail.com>
 // SPDX-License-Identifier: GPL-3.0-or-later
+
+class x5_SpawnPoint
+{
+  Vector3 position;
+  double height;
+  double radius;
+  Class<Actor> replaceeType;
+  Actor replacee;
+}
 
 class x5_EventHandler : EventHandler
 {
 
-  // The multiplier must work immediately, because RandomSpawners are still
-  // RandomSpawners, so they will transform to randomized enemies.
-  //
-  // The divider, on the contrary, must work when RandomSpawners and other
-  // spawners are already transformed to enemies.
-  enum ActTimes
+  override void WorldLoaded(WorldEvent event)
   {
-    BEFORE_RANDOMIZED = 0,
-    AFTER_RANDOMIZED  = 4,
-    TIME_TO_PRINT     = 5
-  };
+    mGlobalMultiplier = x5_multiplier;
+    mMultiplyTime     = 0;
+
+    collectSpawnPoints(mSpawnPoints);
+    mEnemyTypes = collectEnemyTypes(mSpawnPoints);
+
+    if (mGlobalMultiplier == 0)
+    {
+      // Each enemy type has its own multiplier, ask to fill multipliers.
+      mIsWaitingForTypeMultipliersMenu = (consolePlayer == net_arbitrator);
+    }
+    else
+    {
+      // The global multiplier is used for all enemy types.
+      mTypeMultipliers = fillTypeMultipliers(mEnemyTypes, mGlobalMultiplier);
+    }
+  }
+
+  override void UiTick()
+  {
+    if (mIsWaitingForTypeMultipliersMenu && !mIsTypeMultipliersMenuOpened)
+    {
+      mIsTypeMultipliersMenuOpened = true;
+      openTypeMultipliersMenu();
+    }
+  }
 
   override void WorldTick()
   {
-    int multiplier = x5_multiplier;
-    int timeToAct  = (multiplier >= 100) ? BEFORE_RANDOMIZED : AFTER_RANDOMIZED;
+    // wait for type multipliers.
+    if (mTypeMultipliers == NULL) { return; }
 
-    if (level.maptime == AFTER_RANDOMIZED + 1 && multiplier > 100) { nudgeCloned(); }
-
-    if (level.maptime == TIME_TO_PRINT)
+    if (level.maptime > TIME_TO_RANDOMIZE && !mIsMultiplied)
     {
-      x5_Density.printMonsterDensity();
-      return;
+      multiply();
+      mMultiplyTime = level.maptime;
+      mIsMultiplied = true;
     }
-    else if (level.maptime != timeToAct) { return; }
-
-    if (multiplier == 100) { return; }
-
-    Array<Actor> monsters;
-
-    let iterator = ThinkerIterator.Create("Actor");
-    Actor anActor;
-    while (anActor = Actor(iterator.Next()))
+    else if (level.maptime > mMultiplyTime + TIME_TO_RANDOMIZE && mIsMultiplied)
     {
-      let defaultReplacee = getDefaultByType(Actor.getReplacee(anActor.getClassName()));
-      if (isCloneable(defaultReplacee)) { monsters.push(anActor); }
+      nudgeCloned();
+      destroy();
     }
+  }
 
-    Array<String> classes;
-    int integerMultiplier = multiplier / 100;
-    int nCopies           = integerMultiplier - 1;
-    foreach (monster : monsters)
-    {
-      String className = monster.GetClassName();
-      if (classes.Find(className) == classes.size()) { classes.Push(className); }
+  override void NetworkProcess(ConsoleEvent event)
+  {
+    if (event.name.left(3) != "x5_") { return; }
 
-      for (int c = 0; c < nCopies; ++c)
-      {
-        clone(monster);
-      }
-    }
-
-    double fractionMultiplier = (multiplier % 100) * 0.01;
-
-    foreach (className : classes)
-    {
-      Array<Actor> monstersByClass;
-      foreach (monster : monsters)
-      {
-        if (monster.GetClassName() == className) { monstersByClass.Push(monster); }
-      }
-
-      uint nMonstersInClass = monstersByClass.size();
-      Array<Actor> shuffled;
-      shuffled.Resize(nMonstersInClass);
-      for (uint i = 0; i < nMonstersInClass; ++i)
-      {
-        int r = Random(0, nMonstersInClass - 1);
-        for (uint j = 0; j < nMonstersInClass; ++j)
-        {
-          uint index = (r + j) % nMonstersInClass;
-          if (shuffled[index] == NULL)
-          {
-            shuffled[index] = monstersByClass[i];
-            break;
-          }
-        }
-      }
-
-      uint stp = uint(round(nMonstersInClass * fractionMultiplier));
-
-      if (integerMultiplier >= 1) // add
-      {
-        for (uint i = 0; i < stp; ++i)
-        {
-          clone(shuffled[i]);
-        }
-      }
-      else // decimate
-      {
-        for (uint i = stp; i < nMonstersInClass; ++i)
-        {
-          shuffled[i].GiveInventory("x5_Killer", 1);
-        }
-      }
-    }
+    mTypeMultipliers = Dictionary.FromString(event.name.Mid(3));
   }
 
   override void WorldThingSpawned(WorldEvent event)
   {
     let thing = event.thing;
 
+    // Otherwise, if two enemies share the same space, their missiles will collide immediately.
     if (thing != NULL && thing.bMissile && x5_multiplier > 100) { thing.bMThruSpecies = true; }
   }
 
-  // private: ////////////////////////////////////////////////////////////////////
+// private: ////////////////////////////////////////////////////////////////////////////////////////
+
+  private
+  static void collectSpawnPoints(out Array<x5_SpawnPoint> result)
+  {
+    Actor anActor;
+    for (let i = ThinkerIterator.Create("Actor"); anActor = Actor(i.Next());)
+    {
+      let replaceeType = Actor.getReplacee(anActor.getClassName());
+
+      if (!isCloneable(getDefaultByType(replaceeType))) { continue; }
+
+      let spawnPoint          = new ("x5_SpawnPoint");
+      spawnPoint.position     = anActor.pos;
+      spawnPoint.height       = anActor.height;
+      spawnPoint.radius       = anActor.radius;
+      spawnPoint.replaceeType = replaceeType;
+      spawnPoint.replacee     = anActor;
+      result.Push(spawnPoint);
+    }
+  }
+
+  private
+  static Dictionary collectEnemyTypes(Array<x5_SpawnPoint> spawnPoints)
+  {
+    let result = Dictionary.Create();
+    foreach (spawnPoint : spawnPoints)
+    {
+      result.Insert(spawnPoint.replaceeType.GetClassName(), "");
+    }
+    return result;
+  }
+
+  private
+  static Dictionary fillTypeMultipliers(Dictionary enemyTypes, int multiplier)
+  {
+    let result              = Dictionary.Create();
+    let formattedMultiplier = String.Format("%d", multiplier);
+    for (let i = DictionaryIterator.Create(enemyTypes); i.Next();)
+    {
+      result.Insert(i.Key(), formattedMultiplier);
+    }
+    return result;
+  }
+
+  private
+  ui void openTypeMultipliersMenu()
+  {
+    Menu.SetMenu("x5_TypeMultipliers");
+    x5_TypeMultipliersMenu(Menu.GetCurrentMenu()).setUp(self, mEnemyTypes);
+  }
+
+  private
+  int mGlobalMultiplier;
+  private
+  bool mIsWaitingForTypeMultipliersMenu;
+  private
+  ui bool mIsTypeMultipliersMenuOpened;
+  private
+  Dictionary mEnemyTypes;
+  private
+  Dictionary mTypeMultipliers;
+  private
+  int mMultiplyTime;
+  private
+  Array<x5_SpawnPoint> mSpawnPoints;
+  private bool mIsMultiplied;
+
+  private
+  void multiply()
+  {
+    for (let i = DictionaryIterator.Create(mTypeMultipliers); i.Next();)
+    {
+      int multiplier = i.Value().ToInt();
+      if (multiplier == 100) { continue; }
+
+      Array<Actor> enemiesByType;
+      collectSpawnedEnemiesByType(i.Key(), enemiesByType);
+      multiplyEnemies(enemiesByType, multiplier);
+    }
+  }
+
+  private
+  void collectSpawnedEnemiesByType(Class<Actor> type, out Array<Actor> enemiesByType)
+  {
+    foreach (spawnPoint : mSpawnPoints)
+    {
+      if (spawnPoint.replaceeType != type) { continue; }
+
+      // If the actor is still present, great! Otherwise, assume the spawned actor isn't far away.
+      if (spawnPoint.replacee != NULL) { enemiesByType.Push(spawnPoint.replacee); }
+      else
+      {
+        let pos    = spawnPoint.position;
+        let height = spawnPoint.height;
+        let radius = spawnPoint.radius;
+        let i      = BlockThingsIterator.CreateFromPos(pos.x, pos.y, pos.z, height, radius, false);
+
+        if (i.Next()) { enemiesByType.Push(i.thing); }
+      }
+    }
+  }
+
+  private
+  void multiplyEnemies(Array<Actor> enemies, int multiplier)
+  {
+    if (multiplier == 100) { return; }
+
+    int integerMultiplier = multiplier / 100;
+    int copiesNumber      = integerMultiplier - 1;
+    foreach (enemy : enemies)
+    {
+      if (multiplier == 0) { enemy.GiveInventory("x5_Killer", 1); }
+      else
+      {
+        for (int c = 0; c < copiesNumber; ++c)
+        {
+          clone(enemy);
+        }
+      }
+    }
+
+    if (multiplier % 100 == 0) { return; }
+
+    shuffle(enemies);
+
+    double fractionMultiplier = (multiplier % 100) * 0.01;
+    uint enemiesNumber        = enemies.Size();
+    uint stp                  = uint(round(enemiesNumber * fractionMultiplier));
+
+    if (integerMultiplier >= 1) // add
+    {
+      for (uint i = 0; i < stp; ++i)
+      {
+        clone(enemies[i]);
+      }
+    }
+    else // decimate
+    {
+      for (uint i = stp; i < enemiesNumber; ++i)
+      {
+        enemies[i].GiveInventory("x5_Killer", 1);
+      }
+    }
+  }
 
   private
   void clone(Actor original)
@@ -187,7 +297,7 @@ class x5_EventHandler : EventHandler
   static void nudge(Actor anActor)
   {
     double distance = anActor.radius * 3;
-    int startAngle  = random(-180, 180);
+    int startAngle  = Random[x5](-180, 180);
     for (int deltaAngle = 0; deltaAngle <= 360; deltaAngle += 10)
     {
       double angle = Actor.normalize180(startAngle + deltaAngle);
@@ -214,5 +324,23 @@ class x5_EventHandler : EventHandler
       anActor.setOrigin(oldPos, true);
     }
   }
+
+  private
+  static void shuffle(out Array<Actor> actors)
+  {
+    // Fisher-Yates shuffle.
+    uint numberOfActors = actors.size();
+    for (uint i = numberOfActors - 1; i >= 1; --i)
+    {
+      int j = Random(0, i);
+
+      let temp  = actors[i];
+      actors[i] = actors[j];
+      actors[j] = temp;
+    }
+  }
+
+  // There are mods that have randomization that takes a few tics.
+  const TIME_TO_RANDOMIZE = 4;
 
 } // class x5_EventHandler
