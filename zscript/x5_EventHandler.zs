@@ -187,7 +187,11 @@ class x5_EventHandler : EventHandler
     int copiesNumber      = integerMultiplier - 1;
     foreach (enemy : enemies)
     {
-      if (multiplier == 0) { enemy.GiveInventory("x5_Killer", 1); }
+      if (multiplier == 0)
+      {
+        let killer = x5_Killer(Actor.Spawn("x5_Killer", x5_Killer.makePosition(enemy)));
+	killer.init(enemy);
+      }
       else
       {
         for (int c = 0; c < copiesNumber; ++c)
@@ -216,7 +220,8 @@ class x5_EventHandler : EventHandler
     {
       for (uint i = stp; i < enemiesNumber; ++i)
       {
-        enemies[i].GiveInventory("x5_Killer", 1);
+        let killer = x5_Killer(Actor.Spawn("x5_Killer", x5_Killer.makePosition(enemies[i])));
+	killer.init(enemies[i]);
       }
     }
   }

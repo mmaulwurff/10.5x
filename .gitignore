@@ -15,6 +15,7 @@
 
 # and these file types:
 !*.md
+!*.png
 !*.txt
 !*.zs
 
