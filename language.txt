@@ -5,7 +5,8 @@
 
 [enu default]
 
-// X Tag
+X_TYPE_MENU_TITLE = "10.5x Enemy Multipliers";
+X_EXIT  = "Exit this menu to start the level.";
 X_000   = "Per enemy type (on level start)";
 X_005   = "Anybody home?";
 X_050   = "Half-Life? Half: dead";
@@ -19,7 +20,8 @@ X_10000 = "Are you insane?";
 
 [ru]
 
-// X Tag
+X_TYPE_MENU_TITLE = "10.5x Коэффициенты врагов";
+X_EXIT  = "Выйдите из этого меню, чтобы начать уровень.";
 X_000   = "По типу врагов (при старте уровня)";
 X_005   = "Кто-нибудь дома?";
 X_050   = "Полураспад";
@@ -33,7 +35,6 @@ X_10000 = "С ума сошли?";
 
 [ptb]
 
-// X Tag
 X_005   = "Alguém em casa?";
 X_050   = "Half-Life? Half: morto";
 X_100   = "Normal";

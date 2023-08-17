@@ -17,6 +17,10 @@ class x5_TypeMultipliersMenu : OptionMenu
     mDesc.mItems.clear();
     mDesc.mSelectedItem = 0;
 
+    String description = StringTable.Localize("$X_EXIT");
+    mDesc.mItems.push(new ("OptionMenuItemStaticText").InitDirect(description, Font.CR_BLACK));
+    mDesc.mItems.push(new ("OptionMenuItemStaticText").Init(""));
+
     Array<x5_TypeSortElement> types;
 
     for (let i = DictionaryIterator.Create(enemyTypes); i.Next();)
@@ -50,6 +54,8 @@ class x5_TypeMultipliersMenu : OptionMenu
     foreach (menuItem : mDesc.mItems)
     {
       let slider = OptionMenuItemX5TypeSlider(menuItem);
+      if (slider == NULL) continue;
+
       typeMultipliers.Insert(slider.getType().GetClassName(),
                              String.Format("%d", slider.getValue()));
     }
