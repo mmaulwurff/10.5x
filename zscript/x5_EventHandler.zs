@@ -15,10 +15,23 @@ class x5_EventHandler : EventHandler
 
   override void WorldLoaded(WorldEvent event)
   {
+    if (level.MapName ~== "titlemap")
+    {
+      destroy();
+      return;
+    }
+
     mGlobalMultiplier = x5_multiplier;
     mMultiplyTime     = 0;
 
     collectSpawnPoints(mSpawnPoints);
+
+    if (mSpawnPoints.size() == 0)
+    {
+      destroy();
+      return;
+    }
+
     mEnemyTypes = collectEnemyTypes(mSpawnPoints);
 
     if (mGlobalMultiplier == 0)
