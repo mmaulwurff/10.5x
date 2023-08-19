@@ -7,8 +7,7 @@ class OptionMenuItemX5TypeSlider : OptionMenuItemSlider
   {
     let defaultEnemy = getDefaultByType(type);
     let tag = defaultEnemy.getTag();
-    let health = defaultEnemy.Health;
-    let label = String.Format("%s (%d)", tag, health);
+    let label = String.Format("%s", tag);
     Super.Init(label, "", 0, 10.5, 0.05, 2);
 
     mValue = value;
