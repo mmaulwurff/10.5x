@@ -22,7 +22,6 @@ class x5_EventHandler : EventHandler
     }
 
     mGlobalMultiplier = x5_multiplier;
-    mMultiplyTime     = 0;
 
     collectSpawnPoints(mSpawnPoints);
 
@@ -60,15 +59,9 @@ class x5_EventHandler : EventHandler
     // wait for type multipliers.
     if (mTypeMultipliers == NULL) { return; }
 
-    if (level.maptime > TIME_TO_RANDOMIZE && !mIsMultiplied)
+    if (level.maptime > TIME_TO_RANDOMIZE)
     {
       multiply();
-      mMultiplyTime = level.maptime;
-      mIsMultiplied = true;
-    }
-    else if (level.maptime > mMultiplyTime + TIME_TO_RANDOMIZE && mIsMultiplied)
-    {
-      nudgeCloned();
       destroy();
     }
   }
@@ -151,10 +144,7 @@ class x5_EventHandler : EventHandler
   private
   Dictionary mTypeMultipliers;
   private
-  int mMultiplyTime;
-  private
   Array<x5_SpawnPoint> mSpawnPoints;
-  private bool mIsMultiplied;
 
   private
   void multiply()
@@ -285,62 +275,6 @@ class x5_EventHandler : EventHandler
   static bool isCloneable(readonly<Actor> anActor)
   {
     return anActor.bIsMonster && !anActor.bFriendly && anActor.bCountKill;
-  }
-
-  private
-  static void nudgeCloned()
-  {
-    Dictionary occupiedPositions = Dictionary.create();
-
-    let iterator = ThinkerIterator.Create("Actor");
-    Actor anActor;
-    while (anActor = Actor(iterator.Next()))
-    {
-      anActor.bThruSpecies = true;
-      if (!isCloneable(getDefaultByType(anActor.getClass()))) { continue; }
-
-      string positionString
-      = string.format("%f-%f-%f", anActor.pos.x, anActor.pos.y, anActor.pos.z);
-
-      // If this position isn't occupied, remember it. If it is, nudge.
-      if (occupiedPositions.at(positionString).length() == 0)
-      {
-        occupiedPositions.insert(positionString, ".");
-      }
-      else { nudge(anActor); }
-    }
-  }
-
-  private
-  static void nudge(Actor anActor)
-  {
-    double distance = anActor.radius * 3;
-    int startAngle  = Random[x5](-180, 180);
-    for (int deltaAngle = 0; deltaAngle <= 360; deltaAngle += 10)
-    {
-      double angle = Actor.normalize180(startAngle + deltaAngle);
-      vector3 move = distance * (cos(angle), sin(angle), 0);
-
-      if (!anActor.checkMove(anActor.pos.xy + move.xy, PCM_NoActors)) { continue; }
-
-      vector3 oldPos = anActor.pos;
-      anActor.setOrigin(oldPos + move, true);
-
-      // Free if can move in at least one direction.
-      bool isFree = false;
-      for (int checkAngle = -180; checkAngle <= 180; checkAngle += 10)
-      {
-        if (!anActor.checkMove(anActor.pos.xy + (cos(checkAngle), sin(checkAngle)))) { continue; }
-
-        isFree = true;
-        break;
-      }
-
-      if (isFree) { break; }
-
-      // If stuck, go back, try again.
-      anActor.setOrigin(oldPos, true);
-    }
   }
 
   private
