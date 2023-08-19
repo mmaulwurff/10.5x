@@ -15,22 +15,37 @@ class x5_TypeMultipliersMenu : OptionMenu
     mEventHandler = anEventHandler;
 
     mDesc.mItems.clear();
-    mDesc.mSelectedItem = 0;
+    mDesc.mSelectedItem = 2;
 
     String description = StringTable.Localize("$X_EXIT");
     mDesc.mItems.push(new ("OptionMenuItemStaticText").InitDirect(description, Font.CR_BLACK));
     mDesc.mItems.push(new ("OptionMenuItemStaticText").Init(""));
+
+    let savedMultipliers = Dictionary.FromString(x5_type_multipliers);
+    for (let i = DictionaryIterator.Create(savedMultipliers); i.Next();)
+    {
+      String type = i.Key();
+
+      if (enemyTypes.at(type).Length() != 0)
+      {
+        int multiplier = i.Value().ToInt();
+        enemyTypes.Insert(type, String.Format("%d", multiplier));
+      }
+    }
 
     Array<x5_TypeSortElement> types;
 
     for (let i = DictionaryIterator.Create(enemyTypes); i.Next();)
     {
       Class<Actor> enemyClass = i.Key();
-      let defaultEnemy = getDefaultByType(enemyClass);
-      let element = new("x5_TypeSortElement");
-      element.mName = defaultEnemy.getTag();
-      element.mHealth = defaultEnemy.health;
-      element.mClass = enemyClass;
+      int multiplier          = i.Value().ToInt();
+      let defaultEnemy        = getDefaultByType(enemyClass);
+
+      let element         = new ("x5_TypeSortElement");
+      element.mName       = defaultEnemy.getTag();
+      element.mHealth     = defaultEnemy.health;
+      element.mClass      = enemyClass;
+      element.mMultiplier = multiplier;
       types.push(element);
     }
 
@@ -39,7 +54,7 @@ class x5_TypeMultipliersMenu : OptionMenu
     foreach (element : types)
     {
       let slider = new ("OptionMenuItemX5TypeSlider");
-      slider.Init(element.mClass);
+      slider.Init(element.mClass, element.mMultiplier);
 
       mDesc.mItems.push(slider);
     }
@@ -50,17 +65,22 @@ class x5_TypeMultipliersMenu : OptionMenu
   private
   void report()
   {
-    Dictionary typeMultipliers = Dictionary.Create();
+    let savedMultipliers = Dictionary.FromString(x5_type_multipliers);
+    Dictionary multipliersToReport = Dictionary.Create();
     foreach (menuItem : mDesc.mItems)
     {
       let slider = OptionMenuItemX5TypeSlider(menuItem);
       if (slider == NULL) continue;
 
-      typeMultipliers.Insert(slider.getType().GetClassName(),
-                             String.Format("%d", slider.getValue()));
+      STring className  = slider.getType().GetClassName();
+      String multiplier = String.Format("%d", slider.getValue());
+      multipliersToReport.Insert(className, multiplier);
+      savedMultipliers.Insert(className, multiplier);
     }
 
-    String event = String.Format("x5_%s", typeMultipliers.ToString());
+    CVar.FindCVar("x5_type_multipliers").SetString(savedMultipliers.ToString());
+
+    String event = String.Format("x5_%s", multipliersToReport.ToString());
     mEventHandler.SendNetworkEvent(event);
   }
 
@@ -100,11 +120,15 @@ class x5_TypeMultipliersMenu : OptionMenu
 
   private
   EventHandler mEventHandler;
-}
+
+} // class x5_TypeMultipliersMenu
 
 class x5_TypeSortElement
 {
+
   String mName;
   int mHealth;
   Class<Actor> mClass;
-}
+  int mMultiplier;
+
+} // class x5_TypeSortElement

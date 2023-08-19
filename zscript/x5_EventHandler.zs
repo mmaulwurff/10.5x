@@ -103,7 +103,7 @@ class x5_EventHandler : EventHandler
     let result = Dictionary.Create();
     foreach (spawnPoint : spawnPoints)
     {
-      result.Insert(spawnPoint.replaceeType.GetClassName(), "");
+      result.Insert(spawnPoint.replaceeType.GetClassName(), "100");
     }
     return result;
   }

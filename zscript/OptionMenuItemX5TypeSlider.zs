@@ -3,7 +3,7 @@
 
 class OptionMenuItemX5TypeSlider : OptionMenuItemSlider
 {
-  void init(Class<Actor> type)
+  void init(Class<Actor> type, int value)
   {
     let defaultEnemy = getDefaultByType(type);
     let tag = defaultEnemy.getTag();
@@ -11,7 +11,7 @@ class OptionMenuItemX5TypeSlider : OptionMenuItemSlider
     let label = String.Format("%s (%d)", tag, health);
     Super.Init(label, "", 0, 10.5, 0.05, 2);
 
-    mValue = 100;
+    mValue = value;
     mType  = type;
   }
 
