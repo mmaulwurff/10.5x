@@ -3,6 +3,8 @@ SPDX-FileCopyrightText: 2020, 2022 Alexander Kromm <mmaulwurff@gmail.com>
 SPDX-License-Identifier: CC0-1.0
 -->
 
+Repository moved [here](https://github.com/mmaulwurff/doom-toolbox).
+
 # x10.5
 
 Enemy multiplier mod for [GZDoom](https://zdoom.org/).
